@@ -26,6 +26,8 @@ cmake .. \
   -DOPENCV_PATH=$TPU_SDK_PATH/opencv \
   -DCMAKE_INSTALL_PREFIX=$TPU_SDK_PATH/samples
 make
+file cvi_sample_$NAME
+scp cvi_sample_$NAME root@192.168.42.1:/root/tpu-sdk-cv180x-ocr/samples/bin
 make install
 file $TPU_SDK_PATH/samples/bin/cvi_sample_$NAME
 popd
