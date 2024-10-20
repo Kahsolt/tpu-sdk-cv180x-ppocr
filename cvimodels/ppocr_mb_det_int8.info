@@ -1,0 +1,263 @@
+Mlir Version: v1.3.228-g19ca95e9-20230921
+Cvimodel Version: 1.4.0
+ppocr_mb_det Build at 2024-10-30 01:17:22
+For cv180x chip ONLY
+CviModel Need ION Memory Size: (13.25 MB)
+
+Sections:
+ID   TYPE      NAME                     SIZE        OFFSET      MD5
+000  weight    weight                   616480      0           c1ae5b89ead7cefd546dea2e47feb469
+001  cmdbuf    subfunc_0                3458280     616480      8a1d02525dc398ce4693a72da89c71bc
+
+WeightMap:
+ID   OFFSET    SIZE      TYPE    N    C    H    W    NAME
+000  213376    768       int8    1    3    16   16   x_preprocess_scale_lut_x_preprocess_table
+001  178608    72        int8    1    8    1    9    conv2d_57.tmp_0_Conv_bias_packed
+002  175216    288       int8    1    8    9    4    conv2d_57.tmp_0_Conv_filter_reordered
+003  163104    256       int8    1    1    1    256  hardswish_0.tmp_0_HardSwish_table
+004  376960    72        int8    1    8    1    9    relu_0.tmp_0_Relu_bias_packed
+005  214592    64        int8    1    8    1    8    relu_0.tmp_0_Relu_filter_reordered
+006  178528    72        int8    1    8    1    9    relu_1.tmp_0_Relu_bias_packed
+007  519376    72        int8    1    8    3    3    relu_1.tmp_0_Relu_filter_reordered
+008  169488    72        int8    1    8    1    9    conv2d_59.tmp_0_Conv_bias_packed
+009  214272    64        int8    1    8    1    8    conv2d_59.tmp_0_Conv_filter_reordered
+010  170512    288       int8    1    32   1    9    relu_2.tmp_0_Relu_bias_packed
+011  168288    256       int8    1    32   1    8    relu_2.tmp_0_Relu_filter_reordered
+012  162816    288       int8    1    32   1    9    relu_3.tmp_0_Relu_bias_packed
+013  174336    288       int8    1    32   3    3    relu_3.tmp_0_Relu_filter_reordered
+014  235952    144       int8    1    16   1    9    conv2d_61.tmp_0_Conv_bias_packed
+015  89200     512       int8    1    16   1    32   conv2d_61.tmp_0_Conv_filter_reordered
+016  216512    360       int8    1    40   1    9    relu_4.tmp_0_Relu_bias_packed
+017  207920    640       int8    1    40   1    16   relu_4.tmp_0_Relu_filter_reordered
+018  215664    360       int8    1    40   1    9    relu_5.tmp_0_Relu_bias_packed
+019  170800    360       int8    1    40   3    3    relu_5.tmp_0_Relu_filter_reordered
+020  171168    144       int8    1    16   1    9    conv2d_63.tmp_0_Conv_bias_packed
+021  208576    640       int8    1    16   1    40   conv2d_63.tmp_0_Conv_filter_reordered
+022  236096    360       int8    1    40   1    9    relu_6.tmp_0_Relu_bias_packed
+023  245728    640       int8    1    40   1    16   relu_6.tmp_0_Relu_filter_reordered
+024  519456    360       int8    1    40   1    9    relu_7.tmp_0_Relu_bias_packed
+025  214656    1000      int8    1    40   5    5    relu_7.tmp_0_Relu_filter_reordered
+026  178688    216       int8    1    24   1    9    conv2d_65.tmp_0_Conv_bias_packed
+027  179168    960       int8    1    24   1    40   conv2d_65.tmp_0_Conv_filter_reordered
+028  285840    576       int8    1    64   1    9    relu_8.tmp_0_Relu_bias_packed
+029  155376    1536      int8    1    64   1    24   relu_8.tmp_0_Relu_filter_reordered
+030  236464    576       int8    1    64   1    9    relu_9.tmp_0_Relu_bias_packed
+031  152688    1600      int8    1    64   5    5    relu_9.tmp_0_Relu_filter_reordered
+032  152464    216       int8    1    24   1    9    conv2d_67.tmp_0_Conv_bias_packed
+033  237808    1536      int8    1    24   1    64   conv2d_67.tmp_0_Conv_filter_reordered
+034  106576    576       int8    1    64   1    9    relu_10.tmp_0_Relu_bias_packed
+035  150928    1536      int8    1    64   1    24   relu_10.tmp_0_Relu_filter_reordered
+036  207344    576       int8    1    64   1    9    relu_11.tmp_0_Relu_bias_packed
+037  104976    1600      int8    1    64   5    5    relu_11.tmp_0_Relu_filter_reordered
+038  457296    216       int8    1    24   1    9    conv2d_69.tmp_0_Conv_bias_packed
+039  103440    1536      int8    1    24   1    64   conv2d_69.tmp_0_Conv_filter_reordered
+040  163360    1080      int8    1    120  1    9    conv2d_70.tmp_0_Conv_bias_packed
+041  159936    2880      int8    1    120  1    24   conv2d_70.tmp_0_Conv_filter_reordered
+042  103184    256       int8    1    1    1    256  hardswish_1.tmp_0_HardSwish_table
+043  92496     1080      int8    1    120  1    9    depthwise_conv2d_6.tmp_0_Conv_bias_packed
+044  154288    1080      int8    1    120  3    3    depthwise_conv2d_6.tmp_0_Conv_filter_reordered
+045  178912    256       int8    1    1    1    256  hardswish_2.tmp_0_HardSwish_table
+046  88832     360       int8    1    40   1    9    conv2d_71.tmp_0_Conv_bias_packed
+047  564256    4800      int8    1    40   1    120  conv2d_71.tmp_0_Conv_filter_reordered
+048  168544    936       int8    1    104  1    9    conv2d_72.tmp_0_Conv_bias_packed
+049  209216    4160      int8    1    104  1    40   conv2d_72.tmp_0_Conv_filter_reordered
+050  237296    256       int8    1    1    1    256  hardswish_3.tmp_0_HardSwish_table
+051  169568    936       int8    1    104  1    9    depthwise_conv2d_7.tmp_0_Conv_bias_packed
+052  284896    936       int8    1    104  3    3    depthwise_conv2d_7.tmp_0_Conv_filter_reordered
+053  291792    256       int8    1    1    1    256  hardswish_4.tmp_0_HardSwish_table
+054  174624    360       int8    1    40   1    9    conv2d_73.tmp_0_Conv_bias_packed
+055  61520     4160      int8    1    40   1    104  conv2d_73.tmp_0_Conv_filter_reordered
+056  347152    864       int8    1    96   1    9    conv2d_74.tmp_0_Conv_bias_packed
+057  57680     3840      int8    1    96   1    40   conv2d_74.tmp_0_Conv_filter_reordered
+058  235696    256       int8    1    1    1    256  hardswish_5.tmp_0_HardSwish_table
+059  286416    864       int8    1    96   1    9    depthwise_conv2d_8.tmp_0_Conv_bias_packed
+060  287280    864       int8    1    96   3    3    depthwise_conv2d_8.tmp_0_Conv_filter_reordered
+061  288144    256       int8    1    1    1    256  hardswish_6.tmp_0_HardSwish_table
+062  288400    360       int8    1    40   1    9    conv2d_75.tmp_0_Conv_bias_packed
+063  164448    3840      int8    1    40   1    96   conv2d_75.tmp_0_Conv_filter_reordered
+064  501824    864       int8    1    96   1    9    conv2d_76.tmp_0_Conv_bias_packed
+065  292048    3840      int8    1    96   1    40   conv2d_76.tmp_0_Conv_filter_reordered
+066  448640    256       int8    1    1    1    256  hardswish_7.tmp_0_HardSwish_table
+067  334288    864       int8    1    96   1    9    depthwise_conv2d_9.tmp_0_Conv_bias_packed
+068  175504    864       int8    1    96   3    3    depthwise_conv2d_9.tmp_0_Conv_filter_reordered
+069  237040    256       int8    1    1    1    256  hardswish_8.tmp_0_HardSwish_table
+070  507008    360       int8    1    40   1    9    conv2d_77.tmp_0_Conv_bias_packed
+071  239344    3840      int8    1    40   1    96   conv2d_77.tmp_0_Conv_filter_reordered
+072  176368    2160      int8    1    240  1    9    conv2d_78.tmp_0_Conv_bias_packed
+073  93584     9600      int8    1    240  1    40   conv2d_78.tmp_0_Conv_filter_reordered
+074  243184    256       int8    1    1    1    256  hardswish_9.tmp_0_HardSwish_table
+075  86416     2160      int8    1    240  1    9    depthwise_conv2d_10.tmp_0_Conv_bias_packed
+076  243440    2160      int8    1    240  3    3    depthwise_conv2d_10.tmp_0_Conv_filter_reordered
+077  214336    256       int8    1    1    1    256  hardswish_10.tmp_0_HardSwish_table
+078  348016    504       int8    1    56   1    9    conv2d_79.tmp_0_Conv_bias_packed
+079  44240     13440     int8    1    56   1    240  conv2d_79.tmp_0_Conv_filter_reordered
+080  448896    3024      int8    1    336  1    9    conv2d_80.tmp_0_Conv_bias_packed
+081  352848    18816     int8    1    336  1    56   conv2d_80.tmp_0_Conv_filter_reordered
+082  373200    256       int8    1    1    1    256  hardswish_11.tmp_0_HardSwish_table
+083  288768    3024      int8    1    336  1    9    depthwise_conv2d_11.tmp_0_Conv_bias_packed
+084  373936    3024      int8    1    336  3    3    depthwise_conv2d_11.tmp_0_Conv_filter_reordered
+085  377040    256       int8    1    1    1    256  hardswish_12.tmp_0_HardSwish_table
+086  377296    504       int8    1    56   1    9    conv2d_81.tmp_0_Conv_bias_packed
+087  216880    18816     int8    1    56   1    336  conv2d_81.tmp_0_Conv_filter_reordered
+088  156912    3024      int8    1    336  1    9    conv2d_82.tmp_0_Conv_bias_packed
+089  180128    18816     int8    1    336  1    56   conv2d_82.tmp_0_Conv_filter_reordered
+090  378064    256       int8    1    1    1    256  hardswish_13.tmp_0_HardSwish_table
+091  171312    3024      int8    1    336  1    9    depthwise_conv2d_12.tmp_0_Conv_bias_packed
+092  198944    8400      int8    1    336  5    5    depthwise_conv2d_12.tmp_0_Conv_filter_reordered
+093  237552    256       int8    1    1    1    256  hardswish_14.tmp_0_HardSwish_table
+094  378320    720       int8    1    80   1    9    conv2d_83.tmp_0_Conv_bias_packed
+095  379040    26880     int8    1    80   1    336  conv2d_83.tmp_0_Conv_filter_reordered
+096  405920    4320      int8    1    480  1    9    conv2d_84.tmp_0_Conv_bias_packed
+097  410240    38400     int8    1    480  1    80   conv2d_84.tmp_0_Conv_filter_reordered
+098  457520    256       int8    1    1    1    256  hardswish_15.tmp_0_HardSwish_table
+099  348528    4320      int8    1    480  1    9    depthwise_conv2d_13.tmp_0_Conv_bias_packed
+100  335152    12000     int8    1    480  5    5    depthwise_conv2d_13.tmp_0_Conv_filter_reordered
+101  520544    256       int8    1    1    1    256  hardswish_16.tmp_0_HardSwish_table
+102  457776    720       int8    1    80   1    9    conv2d_85.tmp_0_Conv_bias_packed
+103  459104    38400     int8    1    80   1    480  conv2d_85.tmp_0_Conv_filter_reordered
+104  497504    4320      int8    1    480  1    9    conv2d_86.tmp_0_Conv_bias_packed
+105  295888    38400     int8    1    480  1    80   conv2d_86.tmp_0_Conv_filter_reordered
+106  377808    256       int8    1    1    1    256  hardswish_17.tmp_0_HardSwish_table
+107  502688    4320      int8    1    480  1    9    depthwise_conv2d_14.tmp_0_Conv_bias_packed
+108  507376    12000     int8    1    480  5    5    depthwise_conv2d_14.tmp_0_Conv_filter_reordered
+109  88576     256       int8    1    1    1    256  hardswish_18.tmp_0_HardSwish_table
+110  519824    720       int8    1    80   1    9    conv2d_87.tmp_0_Conv_bias_packed
+111  246496    38400     int8    1    80   1    480  conv2d_87.tmp_0_Conv_filter_reordered
+112  520800    4320      int8    1    480  1    9    conv2d_88.tmp_0_Conv_bias_packed
+113  525120    38400     int8    1    480  1    80   conv2d_88.tmp_0_Conv_filter_reordered
+114  563520    256       int8    1    1    1    256  hardswish_19.tmp_0_HardSwish_table
+115  563776    480       int8    1    96   1    5    conv2d_89.tmp_0_Conv_bias_packed
+116  569056    46080     int8    1    96   1    480  conv2d_89.tmp_0_Conv_filter_reordered
+117  458496    480       int8    1    96   1    5    conv2d_90.tmp_0_Conv_bias_packed
+118  451920    5376      int8    1    96   1    56   conv2d_90.tmp_0_Conv_filter_reordered
+119  216032    480       int8    1    96   1    5    conv2d_91.tmp_0_Conv_bias_packed
+120  127888    2304      int8    1    96   1    24   conv2d_91.tmp_0_Conv_filter_reordered
+121  615136    480       int8    1    96   1    5    conv2d_92.tmp_0_Conv_bias_packed
+122  371664    1536      int8    1    96   1    16   conv2d_92.tmp_0_Conv_filter_reordered
+123  615616    384       int8    1    96   2    2    nearest_interp_v2_0.tmp_0_Resize_filter_reordered
+124  92016     480       int8    1    96   1    5    nearest_interp_v2_0.tmp_0_Resize_bias_packed
+125  615616    384       int8    1    96   2    2    nearest_interp_v2_1.tmp_0_Resize_filter_reordered
+126  616000    480       int8    1    96   1    5    nearest_interp_v2_1.tmp_0_Resize_bias_packed
+127  615616    384       int8    1    96   2    2    nearest_interp_v2_2.tmp_0_Resize_filter_reordered
+128  373456    480       int8    1    96   1    5    nearest_interp_v2_2.tmp_0_Resize_bias_packed
+129  214144    120       int8    1    24   1    5    conv2d_93.tmp_0_Conv_bias_packed
+130  130192    20736     int8    1    24   9    96   conv2d_93.tmp_0_Conv_filter_reordered
+131  458976    120       int8    1    24   1    5    conv2d_94.tmp_0_Conv_bias_packed
+132  107152    20736     int8    1    24   9    96   conv2d_94.tmp_0_Conv_filter_reordered
+133  44112     120       int8    1    24   1    5    conv2d_95.tmp_0_Conv_bias_packed
+134  65680     20736     int8    1    24   9    96   conv2d_95.tmp_0_Conv_filter_reordered
+135  43984     120       int8    1    24   1    5    conv2d_96.tmp_0_Conv_bias_packed
+136  23248     20736     int8    1    24   9    96   conv2d_96.tmp_0_Conv_filter_reordered
+137  21712     1536      int8    1    24   8    8    nearest_interp_v2_3.tmp_0_Resize_filter_reordered
+138  246368    120       int8    1    24   1    5    nearest_interp_v2_3.tmp_0_Resize_bias_packed
+139  615616    384       int8    1    24   4    4    nearest_interp_v2_4.tmp_0_Resize_filter_reordered
+140  245600    120       int8    1    24   1    5    nearest_interp_v2_4.tmp_0_Resize_bias_packed
+141  21616     96        int8    1    24   2    2    nearest_interp_v2_5.tmp_0_Resize_filter_reordered
+142  21488     120       int8    1    24   1    5    nearest_interp_v2_5.tmp_0_Resize_bias_packed
+143  21264     216       int8    1    24   1    9    batch_norm_47.tmp_4_Relu_bias_packed
+144  528       20736     int8    1    24   9    96   batch_norm_47.tmp_4_Relu_filter_reordered
+145  89712     2304      int8    1    24   4    24   p2o.ConvTranspose.1_ConvTranspose_filter_reordered
+146  400       120       int8    1    24   1    5    p2o.ConvTranspose.1_ConvTranspose_bias_packed
+147  174992    216       int8    1    24   1    9    batch_norm_48.tmp_4_Relu_bias_packed
+148  368       24        int8    1    24   1    1    batch_norm_48.tmp_4_Relu_filter_reordered
+149  272       96        int8    1    1    4    24   p2o.ConvTranspose.3_ConvTranspose_filter_reordered
+150  208560    5         int8    1    1    1    5    p2o.ConvTranspose.3_ConvTranspose_bias_packed
+151  256       2         bf16    1    1    1    1    p2o.Add.29_Addp2o.Add.29_Add_p2o.Add.29_Add_const_val_bf16
+152  0         256       int8    1    1    1    256  sigmoid_0.tmp_0_Sigmoid_table
+
+Program #0
+    batch_num   : 0
+    private_gmem_size: 0
+    shared_gmem_size: 8179200
+    inputs      : x_raw
+    outputs     : sigmoid_0.tmp_0_Sigmoid
+    routines    :
+     #00  tpu
+        inputs  : x_raw
+        outputs : sigmoid_0.tmp_0_Sigmoid
+        section : subfunc_0
+
+    tensor_map  :
+        ID   OFFSET      TYPE  N    C    H    W    QSCALE     MEM     NAME
+        000  0           uint8 1    640  640  3    1.000000   io_mem  x_raw
+        001  0           uint8 1    3    640  640  1.000000   shared  x_preprocess_tranpose
+        002  1228800     int8  1    3    640  640  0.020787   shared  x_preprocess_scale_lut
+        003  0           int8  1    8    320  320  0.024130   shared  hardswish_0.tmp_0_HardSwish
+        004  819200      int8  1    8    320  320  0.102040   shared  relu_1.tmp_0_Relu
+        005  1638400     int8  1    32   320  320  0.099942   shared  relu_2.tmp_0_Relu
+        006  0           int8  1    32   160  160  0.123989   shared  relu_3.tmp_0_Relu
+        007  6758400     int8  1    16   160  160  0.094605   shared  conv2d_61.tmp_0_Conv
+        008  819200      int8  1    40   160  160  0.065449   shared  relu_4.tmp_0_Relu
+        009  0           int8  1    16   160  160  0.088680   shared  conv2d_63.tmp_0_Conv
+        010  6348800     int8  1    16   160  160  0.097535   shared  p2o.Add.3_Add
+        011  409600      int8  1    40   160  160  0.090170   shared  relu_6.tmp_0_Relu
+        012  0           int8  1    24   80   80   0.059016   shared  conv2d_65.tmp_0_Conv
+        013  153600      int8  1    64   80   80   0.062600   shared  relu_8.tmp_0_Relu
+        014  563200      int8  1    64   80   80   0.067506   shared  relu_9.tmp_0_Relu
+        015  153600      int8  1    24   80   80   0.076988   shared  p2o.Add.5_Add
+        016  972800      int8  1    64   80   80   0.083036   shared  relu_10.tmp_0_Relu
+        017  307200      int8  1    64   80   80   0.068483   shared  relu_11.tmp_0_Relu
+        018  1356800     int8  1    24   80   80   0.112908   shared  p2o.Add.7_Add
+        019  0           int8  1    120  80   80   0.077303   shared  hardswish_1.tmp_0_HardSwish
+        020  1510400     int8  1    120  40   40   0.107188   shared  depthwise_conv2d_6.tmp_0_Conv
+        021  0           int8  1    40   40   40   0.059951   shared  conv2d_71.tmp_0_Conv
+        022  64000       int8  1    104  40   40   0.053159   shared  hardswish_3.tmp_0_HardSwish
+        023  1510400     int8  1    40   40   40   0.055752   shared  conv2d_73.tmp_0_Conv
+        024  217600      int8  1    40   40   40   0.082335   shared  p2o.Add.9_Add
+        025  64000       int8  1    96   40   40   0.071729   shared  conv2d_74.tmp_0_Conv
+        026  1510400     int8  1    40   40   40   0.066999   shared  conv2d_75.tmp_0_Conv
+        027  281600      int8  1    40   40   40   0.097021   shared  p2o.Add.11_Add
+        028  1574400     int8  1    96   40   40   0.072797   shared  conv2d_76.tmp_0_Conv
+        029  345600      int8  1    40   40   40   0.083387   shared  conv2d_77.tmp_0_Conv
+        030  1510400     int8  1    240  40   40   0.051315   shared  hardswish_9.tmp_0_HardSwish
+        031  0           int8  1    240  40   40   0.081651   shared  depthwise_conv2d_10.tmp_0_Conv
+        032  1510400     int8  1    56   40   40   0.071259   shared  conv2d_79.tmp_0_Conv
+        033  0           int8  1    336  40   40   0.079230   shared  conv2d_80.tmp_0_Conv
+        034  1600000     int8  1    336  40   40   0.055461   shared  hardswish_11.tmp_0_HardSwish
+        035  0           int8  1    336  40   40   0.105548   shared  depthwise_conv2d_11.tmp_0_Conv
+        036  1600000     int8  1    336  40   40   0.092868   shared  hardswish_12.tmp_0_HardSwish
+        037  0           int8  1    56   40   40   0.061765   shared  conv2d_81.tmp_0_Conv
+        038  89600       int8  1    56   40   40   0.090369   shared  p2o.Add.15_Add
+        039  1510400     int8  1    336  40   40   0.075993   shared  conv2d_82.tmp_0_Conv
+        040  179200      int8  1    336  40   40   0.098791   shared  hardswish_13.tmp_0_HardSwish
+        041  1510400     int8  1    336  20   20   0.079634   shared  depthwise_conv2d_12.tmp_0_Conv
+        042  179200      int8  1    336  20   20   0.097331   shared  hardswish_14.tmp_0_HardSwish
+        043  1510400     int8  1    80   20   20   0.061759   shared  conv2d_83.tmp_0_Conv
+        044  1542400     int8  1    480  20   20   0.076899   shared  conv2d_84.tmp_0_Conv
+        045  179200      int8  1    480  20   20   0.054165   shared  hardswish_15.tmp_0_HardSwish
+        046  1542400     int8  1    480  20   20   0.086841   shared  depthwise_conv2d_13.tmp_0_Conv
+        047  179200      int8  1    480  20   20   0.058812   shared  hardswish_16.tmp_0_HardSwish
+        048  1542400     int8  1    80   20   20   0.080043   shared  conv2d_85.tmp_0_Conv
+        049  179200      int8  1    80   20   20   0.076802   shared  p2o.Add.17_Add
+        050  1510400     int8  1    480  20   20   0.091676   shared  conv2d_86.tmp_0_Conv
+        051  211200      int8  1    480  20   20   0.063077   shared  hardswish_17.tmp_0_HardSwish
+        052  1510400     int8  1    480  20   20   0.126762   shared  depthwise_conv2d_14.tmp_0_Conv
+        053  211200      int8  1    480  20   20   0.115822   shared  hardswish_18.tmp_0_HardSwish
+        054  1510400     int8  1    80   20   20   0.152399   shared  conv2d_87.tmp_0_Conv
+        055  1542400     int8  1    80   20   20   0.159320   shared  p2o.Add.19_Add
+        056  179200      int8  1    480  20   20   0.132124   shared  conv2d_88.tmp_0_Conv
+        057  1510400     int8  1    480  20   20   0.121760   shared  hardswish_19.tmp_0_HardSwish
+        058  768000      int8  1    96   20   20   1.130795   shared  conv2d_89.tmp_0_Conv
+        059  806400      int8  1    96   40   40   0.255914   shared  conv2d_90.tmp_0_Conv
+        060  5721600     int8  1    96   80   80   0.262007   shared  conv2d_91.tmp_0_Conv
+        061  3264000     int8  1    96   160  160  0.342742   shared  conv2d_92.tmp_0_Conv
+        062  0           int8  1    96   40   40   1.188589   shared  p2o.Add.21_Add
+        063  806400      int8  1    96   80   80   0.989067   shared  nearest_interp_v2_1.tmp_0_Resize
+        064  153600      int8  1    96   80   80   1.228868   shared  p2o.Add.23_Add
+        065  806400      int8  1    96   160  160  0.994753   shared  nearest_interp_v2_2.tmp_0_Resize
+        066  5721600     int8  1    96   160  160  1.204991   shared  p2o.Add.25_Add
+        067  806400      int8  1    24   20   20   13.784410  shared  conv2d_93.tmp_0_Conv
+        068  816000      int8  1    24   40   40   12.611200  shared  conv2d_94.tmp_0_Conv
+        069  854400      int8  1    24   80   80   13.161921  shared  conv2d_95.tmp_0_Conv
+        070  2851200     int8  1    24   160  160  13.042459  shared  conv2d_96.tmp_0_Conv
+        071  1008000     int8  1    24   160  160  13.042459  shared  nearest_interp_v2_3.tmp_0_Resize
+        072  1622400     int8  1    24   160  160  13.042459  shared  nearest_interp_v2_4.tmp_0_Resize
+        073  2236800     int8  1    24   160  160  13.042459  shared  nearest_interp_v2_5.tmp_0_Resize
+        074  1008000     int8  1    96   160  160  13.042459  shared  p2o.Concat.1_Concat
+        075  0           int8  1    24   160  160  0.077217   shared  batch_norm_47.tmp_4_Relu
+        076  614400      int8  1    24   320  320  0.031117   shared  p2o.ConvTranspose.1_ConvTranspose
+        077  0           int8  1    1    640  640  1.798208   shared  p2o.ConvTranspose.3_ConvTranspose
+        078  819200      bf16  1    1    640  640  1.000000   shared  p2o.ConvTranspose.3_ConvTransposep2o.Add.29_Add_bf16
+        079  0           bf16  1    1    640  640  1.000000   shared  p2o.Add.29_Add
+        080  819200      int8  1    1    640  640  1.799546   shared  p2o.Add.29_Addsigmoid_0.tmp_0_Sigmoid_si8
+        081  0           int8  1    1    640  640  0.007874   io_mem  sigmoid_0.tmp_0_Sigmoid

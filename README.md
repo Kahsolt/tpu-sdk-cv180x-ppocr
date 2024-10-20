@@ -4,18 +4,15 @@
 
 ----
 
+To compiler a cvimodel runner, use my handy script:
+
+```
+bash ./compile_sample_runner.sh <runner_name>
+```
+
+or run step by step:
+
 ```shell
-# suppose we are at /workspace
-pwd
-# get cross-build toolchain
-git clone https://github.com/milkv-duo/duo-sdk
-export PATH=$PATH:/workspace/duo-sdk/riscv64-linux-musl-x86_64/bin/
-
-# goto tpu-sdk folder
-pushd tpu-sdk-cv180x-ocr
-export TPU_SDK_PATH=$pwd
-source ./envs_tpu_sdk.sh
-
 # compile a hello-word TPU app
 pushd samples/classifier_fused_preprocess
 mkdir -p build ; cd build
@@ -43,6 +40,8 @@ cd samples
 
 - https://github.com/milkv-duo/tpu-sdk-cv180x
 - https://github.com/sophgo/cviruntime
+- cv::imread is slow: https://github.com/libvips/pyvips/issues/179#issuecomment-618936358
+  - https://github.com/libvips/libvips
 
 ----
 by Armit

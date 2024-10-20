@@ -1,2 +1,6 @@
+# meta
 .vscode/
 build/
+
+# compile toolchain
+duo-sdk/

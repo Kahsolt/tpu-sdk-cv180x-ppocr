@@ -1,10 +1,21 @@
 # PPOCR cls-model with fuse proprocess and quant to int8
 
+⚪ model I/O
+
+```
+input.dtype:  uint8
+input.shape:  (1, 48, 640, 3)   // nhwc
+output.dtype: int8              // quant-logits
+output.shape: (1, 2, 1, 1)      // ndxx
+```
+
+⚪ build & run
+
 ```shell
 # compile runtime
-bash ./compile_sample_porgram.sh ppocr_cls
+bash ./compile_sample_runner.sh ppocr_cls
 # upload cvimodel & runtime
-scp ./cvimodels/ppocr_mb_cls.cvimodel root@192.168.42.1:/root/tpu-sdk-cv180x-ocr/cvimodels
+scp ./cvimodels/ppocr*_cls.cvimodel root@192.168.42.1:/root/tpu-sdk-cv180x-ocr/cvimodels
 
 # run on chip
 cd samples
@@ -19,69 +30,70 @@ cd samples
 ```
 [root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_ppocr_cls ../cvimodels/ppocr_mb_cls.cvimodel ./data/crop_1.jpg
 version: 1.4.0
-ppocr_mb_cls Build at 2024-10-19 21:20:26 For platform cv180x
+ppocr_mb_cls Build at 2024-10-20 16:07:13 For platform cv180x
 Max SharedMem size:296960
-CVI_NN_RegisterModel succeeded (time cost: 14.940 ms)
-load image (time cost: 16.042 ms)
-preprocess (time cost: 11.618 ms)
-feed input (time cost: 0.218 ms)
-CVI_NN_Forward succeeded (time cost: 0.364 ms)
+CVI_NN_RegisterModel succeeded (time cost: 12.946 ms)
+load image (time cost: 11.483 ms)
+preprocess (time cost: 6.528 ms)
+feed input (time cost: 0.347 ms)
+CVI_NN_Forward succeeded (time cost: 0.263 ms)
 ------
-  0.000000, idx 0, 0
-  -0.000000, idx 1, 180
+  q-logit for label 0: 19
+  q-logit for label 180: -19
 ------
-Post-process probabilities (time cost: 0.531 ms)
-CVI_NN_CleanupModel succeeded (time cost: 3.845 ms)
-Total time cost: 52.978 ms
+Show q-logits (time cost: 0.244 ms)
+CVI_NN_CleanupModel succeeded (time cost: 3.404 ms)
+Total time cost: 39.496 ms
 
 [root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_ppocr_cls ../cvimodels/ppocr_mb_cls.cvimodel ./data/crop_1_rev.jpg
 version: 1.4.0
-ppocr_mb_cls Build at 2024-10-19 21:20:26 For platform cv180x
+ppocr_mb_cls Build at 2024-10-20 16:07:13 For platform cv180x
 Max SharedMem size:296960
-CVI_NN_RegisterModel succeeded (time cost: 12.698 ms)
-load image (time cost: 15.844 ms)
-preprocess (time cost: 8.133 ms)
-feed input (time cost: 0.353 ms)
-CVI_NN_Forward succeeded (time cost: 0.331 ms)
+CVI_NN_RegisterModel succeeded (time cost: 10.469 ms)
+
+load image (time cost: 13.583 ms)
+preprocess (time cost: 6.514 ms)
+feed input (time cost: 0.347 ms)
+CVI_NN_Forward succeeded (time cost: 0.396 ms)
 ------
-  0.005371, idx 0, 0
-  -0.000000, idx 1, 180
+  q-logit for label 0: -29
+  q-logit for label 180: 28
 ------
-Post-process probabilities (time cost: 0.584 ms)
-CVI_NN_CleanupModel succeeded (time cost: 3.090 ms)
-Total time cost: 46.145 ms
+Show q-logits (time cost: 0.245 ms)
+CVI_NN_CleanupModel succeeded (time cost: 3.032 ms)
+Total time cost: 38.649 ms
 
 [root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_ppocr_cls ../cvimodels/ppocr_mb_cls.cvimodel ./data/crop_9.jpg
 version: 1.4.0
-ppocr_mb_cls Build at 2024-10-19 21:20:26 For platform cv180x
+ppocr_mb_cls Build at 2024-10-20 16:07:13 For platform cv180x
 Max SharedMem size:296960
-CVI_NN_RegisterModel succeeded (time cost: 11.569 ms)
-load image (time cost: 3.681 ms)
-preprocess (time cost: 6.111 ms)
-feed input (time cost: 0.319 ms)
-CVI_NN_Forward succeeded (time cost: 0.337 ms)
+CVI_NN_RegisterModel succeeded (time cost: 13.117 ms)
+load image (time cost: 3.254 ms)
+preprocess (time cost: 4.655 ms)
+feed input (time cost: 0.392 ms)
+CVI_NN_Forward succeeded (time cost: 0.169 ms)
 ------
-  0.000000, idx 0, 0
-  -0.000000, idx 1, 180
+  q-logit for label 0: 31
+  q-logit for label 180: -31
 ------
-Post-process probabilities (time cost: 0.473 ms)
-CVI_NN_CleanupModel succeeded (time cost: 3.305 ms)
-Total time cost: 29.872 ms
+Show q-logits (time cost: 0.240 ms)
+CVI_NN_CleanupModel succeeded (time cost: 3.240 ms)
+Total time cost: 29.202 ms
 
 [root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_ppocr_cls ../cvimodels/ppocr_mb_cls.cvimodel ./data/crop_9_rev.jpg
 version: 1.4.0
-ppocr_mb_cls Build at 2024-10-19 21:20:26 For platform cv180x
+ppocr_mb_cls Build at 2024-10-20 16:07:13 For platform cv180x
 Max SharedMem size:296960
-CVI_NN_RegisterModel succeeded (time cost: 11.431 ms)
-load image (time cost: 5.088 ms)
-preprocess (time cost: 6.984 ms)
-feed input (time cost: 0.360 ms)
-CVI_NN_Forward succeeded (time cost: 0.245 ms)
+CVI_NN_RegisterModel succeeded (time cost: 10.655 ms)
+load image (time cost: 3.885 ms)
+preprocess (time cost: 5.331 ms)
+feed input (time cost: 0.344 ms)
+CVI_NN_Forward succeeded (time cost: 0.178 ms)
 ------
-  0.007324, idx 0, 0
-  -0.000000, idx 1, 180
+  q-logit for label 0: -32
+  q-logit for label 180: 31
 ------
-Post-process probabilities (time cost: 0.829 ms)
-CVI_NN_CleanupModel succeeded (time cost: 2.859 ms)
-Total time cost: 32.126 ms
+Show q-logits (time cost: 0.071 ms)
+CVI_NN_CleanupModel succeeded (time cost: 2.971 ms)
+Total time cost: 27.080 ms
 ```

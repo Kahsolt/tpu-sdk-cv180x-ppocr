@@ -13,15 +13,12 @@
 #define IMG_RESIZE_HEIGHT 48
 #define IMG_RESIZE_WIDTH 640
 
-const char* labels[] = {"0", "180"};
-
 int main(int argc, char **argv) {
   clock_t ts_init = clock(), ts_start;
   double ts_timecost;
 
   if (argc != 3) {
-    printf("Usage:\n");
-    printf("   %s cvimodel image.jpg\n", argv[0]);
+    printf("Usage: %s ppocr_cls.cvimodel image.jpg\n", argv[0]);
     exit(-1);
   }
 
@@ -44,40 +41,31 @@ int main(int argc, char **argv) {
   CVI_TENSOR *input  = CVI_NN_GetTensorByName(CVI_NN_DEFAULT_TENSOR, input_tensors,  input_num ); assert(input);
   CVI_TENSOR *output = CVI_NN_GetTensorByName(CVI_NN_DEFAULT_TENSOR, output_tensors, output_num); assert(output);
   //printf("input.dtype: %d\n",   input->fmt);        // CVI_FMT_UINT8=7
-  //printf("input.device: %d\n",  input->mem_type);   // CVI_MEM_SYSTEM=1
-  //printf("output.dtype: %d\n",  output->fmt);       // CVI_FMT_FP32=0
-  //printf("output.device: %d\n", output->mem_type);  // CVI_MEM_SYSTEM=1
+  //printf("input.shape: %d (%d, %d, %d, %d)\n", input->shape.dim_size, input->shape.dim[0], input->shape.dim[1], input->shape.dim[2], input->shape.dim[3]);  // 4 (1, 48, 640, 3)
+  //printf("output.dtype: %d\n",  output->fmt);       // CVI_FMT_INT8=6
+  //printf("output.shape: %d (%d, %d, %d, %d)\n", output->shape.dim_size, output->shape.dim[0], output->shape.dim[1], output->shape.dim[2], output->shape.dim[3]);  // 4 (1, 2, 1, 1)
 
   // load image file
   ts_start = clock();
   cv::Mat image = cv::imread(argv[2]);
   if (!image.data) {
     printf("Could not open or find the image: %s\n", argv[2]);
-    exit(1);
+    exit(2);
   }
   ts_timecost = clock() - ts_start;
   printf("load image (time cost: %.3f ms)\n", clock_to_ms(ts_timecost));
 
-  // resize + Packed2Planar
+  // resize
   ts_start = clock();
   cv::resize(image, image, cv::Size(IMG_RESIZE_WIDTH, IMG_RESIZE_HEIGHT)); // linear is default
-  cv::Mat channels[3];
-  for (int i = 0; i < 3; i++) {
-    channels[i] = cv::Mat(image.rows, image.cols, CV_8SC1);   // 8bit signed single channel
-  }
-  cv::split(image, channels);
   ts_timecost = clock() - ts_start;
   printf("preprocess (time cost: %.3f ms)\n", clock_to_ms(ts_timecost));
 
-  // write to input tensor (int8, since we set `model_deploy.py --quant_input`)
+  // write to input tensor (uint8)
   ts_start = clock();
-  CVI_SHAPE shape = CVI_NN_TensorShape(input);  // bcwh
-  size_t height = shape.dim[2], width = shape.dim[3];
-  int8_t *ptr = (int8_t *) CVI_NN_TensorPtr(input);
-  size_t image_size = height * width;
-  for (int i = 0; i < 3; ++i) {
-    memcpy(ptr + i * image_size, channels[i].data, image_size);
-  }
+  size_t count = CVI_NN_TensorCount(input);
+  uint8_t *ptr = (uint8_t *) CVI_NN_TensorPtr(input);
+  memcpy(ptr, image.reshape(1).data, count);
   ts_timecost = clock() - ts_start;
   printf("feed input (time cost: %.3f ms)\n", clock_to_ms(ts_timecost));
 
@@ -87,23 +75,16 @@ int main(int argc, char **argv) {
   ts_timecost = clock() - ts_start;
   printf("CVI_NN_Forward succeeded (time cost: %.3f ms)\n", clock_to_ms(ts_timecost));
 
-  // read from output tensor (float32, but why?)
+  // read from output tensor (int8)
   ts_start = clock();
-  const double *prob = (double *) CVI_NN_TensorPtr(output);
-  int32_t count = CVI_NN_TensorCount(output);
-  std::vector<size_t> idx(count);
-  std::iota(idx.begin(), idx.end(), 0);  // mset 0
-  std::sort(idx.begin(), idx.end(), [&prob](size_t i, size_t j) {return prob[i] > prob[j];});
+  int8_t *logits = (int8_t *) CVI_NN_TensorPtr(output);  // this model has softmax
   printf("------\n");
-  for (size_t i = 0; i < 2; i++) {
-    int top_k_idx = idx[i];
-    printf("  %f, idx %d", prob[top_k_idx], top_k_idx);
-    printf(", %s", labels[top_k_idx]);
-    printf("\n");
-  }
+  const char* labels[] = {"0", "180"};
+  for (size_t i = 0; i < 2; i++)
+    printf("  q-logit for label %s: %d\n", labels[i], logits[i]);
   printf("------\n");
   ts_timecost = clock() - ts_start;
-  printf("Post-process probabilities (time cost: %.3f ms)\n", clock_to_ms(ts_timecost));
+  printf("Show q-logits (time cost: %.3f ms)\n", clock_to_ms(ts_timecost));
 
   // unload model
   ts_start = clock();
