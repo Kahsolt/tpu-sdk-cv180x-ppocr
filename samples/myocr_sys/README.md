@@ -19,16 +19,11 @@
 # compile runtime
 bash ./compile_sample_runner.sh myocr_sys
 # upload cvimodel & runtime
-scp ./cvimodels/ppocr*.cvimodel root@192.168.42.1:/root/tpu-sdk-cv180x-ocr/cvimodels
+scp ./cvimodels/*ocr*.cvimodel root@192.168.42.1:/root/tpu-sdk-cv180x-ocr/cvimodels
 
 # run on chip
 source ./envs_tpu_sdk.sh
 cd samples
-./bin/cvi_sample_myocr_sys \
-  ../cvimodels/ppocrv4_det_int8.cvimodel \
-  ../cvimodels/ppocr_mb_rec_bf16.cvimodel \
-	./data/gt_7148.jpg
-
 ./bin/cvi_sample_myocr_sys ../cvimodels/ppocrv4_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel ./data/gt_97.jpg
 ./bin/cvi_sample_myocr_sys ../cvimodels/ppocrv3_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel ./data/gt_97.jpg
 ./bin/cvi_sample_myocr_sys ../cvimodels/ppocrv2_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel ./data/gt_97.jpg
