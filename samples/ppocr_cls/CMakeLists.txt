@@ -28,7 +28,7 @@ if(NOT CMAKE_CROSSCOMPILING)
   set(OPENCV_LIBS ${OPENCV_LIBS} opencv_highgui)
 endif()
 
-set(EXTRA_LIBS ${EXTRA_LIBS} dl stdc++ pthread z cnpy)
+set(EXTRA_LIBS ${EXTRA_LIBS} dl stdc++ pthread z)
 
 add_executable(cvi_sample_ppocr_cls ppocr_cls.cpp)
 target_link_libraries(cvi_sample_ppocr_cls

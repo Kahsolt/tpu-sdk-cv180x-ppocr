@@ -1,5 +1,7 @@
 # PPOCR cls-model with fuse proprocess and quant to int8
 
+ℹ This model runner is not maintained, use with causion!
+
 ⚪ model I/O
 
 ```

@@ -21,7 +21,7 @@ output.shape: (1, 1, 640, 640)    // nchw
 # compile runtime
 bash ./compile_sample_runner.sh ppocr_det
 # upload cvimodel & runtime
-scp ./cvimodels/ppocr*_det.cvimodel root@192.168.42.1:/root/tpu-sdk-cv180x-ocr/cvimodels
+scp ./cvimodels/ppocr*_det*.cvimodel root@192.168.42.1:/root/tpu-sdk-cv180x-ocr/cvimodels
 
 # run on chip
 cd samples
