@@ -4,3 +4,6 @@ build/
 
 # compile toolchain
 duo-sdk/
+
+# infer results
+results*
