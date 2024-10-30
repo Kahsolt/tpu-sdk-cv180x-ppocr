@@ -1,0 +1,388 @@
+Mlir Version: v1.3.228-g19ca95e9-20230921
+Cvimodel Version: 1.4.0
+chocr_rec Build at 2024-10-30 19:45:05
+For cv180x chip ONLY
+CviModel Need ION Memory Size: (8.48 MB)
+
+Sections:
+ID   TYPE      NAME                     SIZE        OFFSET      MD5
+000  weight    weight                   2638704     0           30c5f4b7837e5f590e45872cabd8b407
+001  cmdbuf    subfunc_0                3544704     2638704     79187be4914dcf2dad87b9285b61e37b
+
+WeightMap:
+ID   OFFSET    SIZE      TYPE    N    C    H    W    NAME
+000  2430992   6         bf16    1    3    1    1    input_preprocess_dwconv_filter_reordered
+001  2233552   12        uint16  2    3    1    1    input_preprocess_dwconv_bias_reordered
+002  2228544   432       bf16    1    8    9    3    425_Relu_filter_reordered
+003  2583376   32        uint16  2    8    1    1    425_Relu_bias_reordered
+004  2205040   64        bf16    1    4    1    8    428_Relu_filter_reordered
+005  2200944   16        uint16  2    4    1    1    428_Relu_bias_reordered
+006  2228976   72        bf16    1    4    3    3    431_Relu_filter_reordered
+007  608000    16        uint16  2    4    1    1    431_Relu_bias_reordered
+008  574960    144       bf16    1    8    3    3    433_Conv_filter_reordered
+009  2251552   32        uint16  2    8    1    1    433_Conv_bias_reordered
+010  2206384   8         int32   2    1    1    1    26
+011  575104    32        bf16    8    2    1    1    447_Relu25_fix_bf16
+012  2233776   32        int32   8    1    1    1    28
+013  532496    32        bf16    2    8    1    1    448_Gemm_top.Relu27_fix_bf16
+014  2233712   64        bf16    1    4    1    8    459_Conv_filter_reordered
+015  2206400   16        uint16  2    4    1    1    459_Conv_bias_reordered
+016  532096    72        bf16    1    4    3    3    461_Conv_filter_reordered
+017  2204992   16        uint16  2    4    1    1    461_Conv_bias_reordered
+018  2233568   144       bf16    1    8    3    3    466_Relu_filter_reordered
+019  2241104   32        uint16  2    8    1    1    466_Relu_bias_reordered
+020  607824    128       bf16    1    8    1    8    467_Conv_filter_reordered
+021  2241136   32        uint16  2    8    1    1    467_Conv_bias_reordered
+022  2253008   448       bf16    1    28   1    8    472_Relu_filter_reordered
+023  2242128   112       uint16  2    28   1    1    472_Relu_bias_reordered
+024  2242240   504       bf16    1    28   3    3    475_Relu_filter_reordered
+025  2205760   112       uint16  2    28   1    1    475_Relu_bias_reordered
+026  2252000   1008      bf16    1    56   3    3    477_Conv_filter_reordered
+027  2205536   224       uint16  2    56   1    1    477_Conv_bias_reordered
+028  2201392   672       bf16    1    6    1    56   479_Conv_filter_reordered
+029  2205008   24        uint16  2    6    1    1    479_Conv_bias_reordered
+030  2231456   108       bf16    1    6    3    3    481_Conv_filter_reordered
+031  531776    24        uint16  2    6    1    1    481_Conv_bias_reordered
+032  2205104   144       bf16    1    8    3    3    486_Relu_filter_reordered
+033  531664    32        uint16  2    8    1    1    486_Relu_bias_reordered
+034  529408    192       bf16    1    12   1    8    487_Conv_filter_reordered
+035  607952    48        uint16  2    12   1    1    487_Conv_bias_reordered
+036  515056    528       bf16    1    22   1    12   492_Relu_filter_reordered
+037  2251904   88        uint16  2    22   1    1    492_Relu_bias_reordered
+038  447200    396       bf16    1    22   3    3    495_Relu_filter_reordered
+039  447104    88        uint16  2    22   1    1    495_Relu_bias_reordered
+040  2202064   528       bf16    1    6    1    44   497_Conv_filter_reordered
+041  532176    24        uint16  2    6    1    1    497_Conv_bias_reordered
+042  447840    108       bf16    1    6    3    3    499_Conv_filter_reordered
+043  2231568   24        uint16  2    6    1    1    499_Conv_bias_reordered
+044  2241168   960       bf16    1    40   1    12   505_Relu_filter_reordered
+045  2201104   160       uint16  2    40   1    1    505_Relu_bias_reordered
+046  446336    720       bf16    1    40   3    3    508_Relu_filter_reordered
+047  529600    160       uint16  2    40   1    1    508_Relu_bias_reordered
+048  511056    4000      bf16    1    80   5    5    510_Conv_filter_reordered
+049  2431392   320       uint16  2    80   1    1    510_Conv_bias_reordered
+050  2583152   80        int32   20   1    1    1    138
+051  442656    3200      bf16    80   20   1    1    524_Relu137_fix_bf16
+052  2251584   320       int32   80   1    1    1    140
+053  507856    3200      bf16    20   80   1    1    525_Gemm_top.Relu139_fix_bf16
+054  2242752   1600      bf16    1    10   1    80   536_Conv_filter_reordered
+055  447056    40        uint16  2    10   1    1    536_Conv_bias_reordered
+056  442464    180       bf16    1    10   3    3    538_Conv_filter_reordered
+057  2233808   40        uint16  2    10   1    1    538_Conv_bias_reordered
+058  533264    216       bf16    1    12   3    3    543_Relu_filter_reordered
+059  2253696   48        uint16  2    12   1    1    543_Relu_bias_reordered
+060  2343504   480       bf16    1    20   1    12   544_Conv_filter_reordered
+061  533184    80        uint16  2    20   1    1    544_Conv_bias_reordered
+062  2558816   2400      bf16    1    60   1    20   549_Relu_filter_reordered
+063  447600    240       uint16  2    60   1    1    549_Relu_bias_reordered
+064  2253744   1080      bf16    1    60   3    3    552_Relu_filter_reordered
+065  2431008   240       uint16  2    60   1    1    552_Relu_bias_reordered
+066  2255600   120       int32   30   1    1    1    178
+067  2255728   7200      bf16    120  30   1    1    566_Relu177_fix_bf16
+068  2262928   480       int32   120  1    1    1    180
+069  2244352   7200      bf16    30   120  1    1    567_Gemm_top.Relu179_fix_bf16
+070  2202592   2400      bf16    1    10   1    120  578_Conv_filter_reordered
+071  2263408   40        uint16  2    10   1    1    578_Conv_bias_reordered
+072  2568560   180       bf16    1    10   3    3    580_Conv_filter_reordered
+073  2307520   40        uint16  2    10   1    1    580_Conv_bias_reordered
+074  2229056   2400      bf16    1    60   1    20   586_Relu_filter_reordered
+075  2253456   240       uint16  2    60   1    1    586_Relu_bias_reordered
+076  2307568   1080      bf16    1    60   3    3    589_Relu_filter_reordered
+077  445952    240       uint16  2    60   1    1    589_Relu_bias_reordered
+078  2201264   120       int32   30   1    1    1    206
+079  2233856   7200      bf16    120  30   1    1    603_Relu205_fix_bf16
+080  2552752   480       int32   120  1    1    1    208
+081  2308656   7200      bf16    30   120  1    1    604_Gemm_top.Relu207_fix_bf16
+082  2343984   2400      bf16    1    10   1    120  615_Conv_filter_reordered
+083  2350416   40        uint16  2    10   1    1    615_Conv_bias_reordered
+084  2350464   180       bf16    1    10   3    3    617_Conv_filter_reordered
+085  2350656   40        uint16  2    10   1    1    617_Conv_bias_reordered
+086  2350704   1440      bf16    1    36   1    20   623_Relu_filter_reordered
+087  2352720   144       uint16  2    36   1    1    623_Relu_bias_reordered
+088  2429184   648       bf16    1    36   3    3    626_Relu_filter_reordered
+089  2431248   144       uint16  2    36   1    1    626_Relu_bias_reordered
+090  2431712   72        int32   18   1    1    1    234
+091  2542384   2592      bf16    72   18   1    1    640_Relu233_fix_bf16
+092  2205248   288       int32   72   1    1    1    236
+093  2545072   2592      bf16    18   72   1    1    641_Gemm_top.Relu235_fix_bf16
+094  2548624   1728      bf16    1    12   1    72   652_Conv_filter_reordered
+095  2553232   48        uint16  2    12   1    1    652_Conv_bias_reordered
+096  2553280   216       bf16    1    12   3    3    654_Conv_filter_reordered
+097  2554656   48        uint16  2    12   1    1    654_Conv_bias_reordered
+098  529760    360       bf16    1    20   3    3    659_Relu_filter_reordered
+099  2554704   80        uint16  2    20   1    1    659_Relu_bias_reordered
+100  2547664   960       bf16    1    24   1    20   660_Conv_filter_reordered
+101  2544976   96        uint16  2    24   1    1    660_Conv_bias_reordered
+102  2346384   1728      bf16    1    36   1    24   665_Relu_filter_reordered
+103  446192    144       uint16  2    36   1    1    665_Relu_bias_reordered
+104  532528    648       bf16    1    36   3    3    668_Relu_filter_reordered
+105  2583232   144       uint16  2    36   1    1    668_Relu_bias_reordered
+106  531696    72        int32   18   1    1    1    274
+107  2263456   2592      bf16    72   18   1    1    682_Relu273_fix_bf16
+108  2554784   288       int32   72   1    1    1    276
+109  2352864   2592      bf16    18   72   1    1    683_Gemm_top.Relu275_fix_bf16
+110  2550352   1728      bf16    1    12   1    72   694_Conv_filter_reordered
+111  2200960   48        uint16  2    12   1    1    694_Conv_bias_reordered
+112  2231792   216       bf16    1    12   3    3    696_Conv_filter_reordered
+113  2241056   48        uint16  2    12   1    1    696_Conv_bias_reordered
+114  2561216   6912      bf16    1    144  1    24   702_Relu_filter_reordered
+115  2555072   576       uint16  2    144  1    1    702_Relu_bias_reordered
+116  2555648   2592      bf16    1    144  3    3    705_Relu_filter_reordered
+117  2558240   576       uint16  2    144  1    1    705_Relu_bias_reordered
+118  2568752   14400     bf16    1    288  5    5    707_Conv_filter_reordered
+119  2553504   1152      uint16  2    288  1    1    707_Conv_bias_reordered
+120  532208    288       int32   72   1    1    1    308
+121  533488    41472     bf16    288  72   1    1    721_Relu307_fix_bf16
+122  2429840   1152      int32   288  1    1    1    310
+123  2583408   41472     bf16    72   288  1    1    722_Gemm_top.Relu309_fix_bf16
+124  2624880   13824     bf16    1    24   1    288  733_Conv_filter_reordered
+125  2552656   96        uint16  2    24   1    1    733_Conv_bias_reordered
+126  2568128   432       bf16    1    24   3    3    735_Conv_filter_reordered
+127  442368    96        uint16  2    24   1    1    735_Conv_bias_reordered
+128  441936    432       bf16    1    24   3    3    740_Relu_filter_reordered
+129  445856    96        uint16  2    24   1    1    740_Relu_bias_reordered
+130  2348112   2304      bf16    1    48   1    24   741_Conv_filter_reordered
+131  441744    192       uint16  2    48   1    1    741_Conv_bias_reordered
+132  594000    13824     bf16    1    144  1    48   746_Relu_filter_reordered
+133  2352144   576       uint16  2    144  1    1    746_Relu_bias_reordered
+134  439152    2592      bf16    1    144  3    3    749_Relu_filter_reordered
+135  2552080   576       uint16  2    144  1    1    749_Relu_bias_reordered
+136  438864    288       int32   72   1    1    1    348
+137  466384    41472     bf16    288  72   1    1    763_Relu347_fix_bf16
+138  437712    1152      int32   288  1    1    1    350
+139  396240    41472     bf16    72   288  1    1    764_Gemm_top.Relu349_fix_bf16
+140  382416    13824     bf16    1    24   1    288  775_Conv_filter_reordered
+141  2201008   96        uint16  2    24   1    1    775_Conv_bias_reordered
+142  381984    432       bf16    1    24   3    3    777_Conv_filter_reordered
+143  381888    96        uint16  2    24   1    1    777_Conv_bias_reordered
+144  367968    13824     bf16    1    144  1    48   783_Relu_filter_reordered
+145  367392    576       uint16  2    144  1    1    783_Relu_bias_reordered
+146  364800    2592      bf16    1    144  3    3    786_Relu_filter_reordered
+147  364224    576       uint16  2    144  1    1    786_Relu_bias_reordered
+148  531808    288       int32   72   1    1    1    376
+149  2266048   41472     bf16    288  72   1    1    800_Relu375_fix_bf16
+150  363072    1152      int32   288  1    1    1    378
+151  321600    41472     bf16    72   288  1    1    801_Gemm_top.Relu377_fix_bf16
+152  515584    13824     bf16    1    24   1    288  812_Conv_filter_reordered
+153  321504    96        uint16  2    24   1    1    812_Conv_bias_reordered
+154  593568    432       bf16    1    24   3    3    814_Conv_filter_reordered
+155  321408    96        uint16  2    24   1    1    814_Conv_bias_reordered
+156  2315856   27648     bf16    1    288  1    48   820_Relu_filter_reordered
+157  320256    1152      uint16  2    288  1    1    820_Relu_bias_reordered
+158  2254832   768       int32   1    192  1    1    857_LSTM_w_bias
+159  575136    18432     bf16    1    192  48   1    857_LSTM853_bf16
+160  319488    768       int32   1    192  1    1    857_LSTM_r_bias
+161  381792    96        bf16    1    1    48   1    857_LSTM_init_h_bf16
+162  381792    96        bf16    1    1    48   1    857_LSTM_init_c_bf16
+163  318976    512       bf16    1    1    32   8    857_LSTM857_LSTM_sigmoid_table_bf16
+164  318464    512       bf16    1    1    32   8    857_LSTM857_LSTM_sigmoid_slope_table_bf16
+165  2205872   512       bf16    1    1    32   8    857_LSTM857_LSTM_tanh_table_bf16
+166  317952    512       bf16    1    1    32   8    857_LSTM857_LSTM_tanh_slope_table_bf16
+167  2431792   110592    bf16    288  192  1    1    857_LSTM_fc857_LSTM_filter_trans_bf16
+168  317184    768       int32   1    192  1    1    883_LSTM_w_bias
+169  298752    18432     bf16    1    192  48   1    883_LSTM879_bf16
+170  297984    768       int32   1    192  1    1    883_LSTM_r_bias
+171  381792    96        bf16    1    1    48   1    883_LSTM_init_h_bf16
+172  381792    96        bf16    1    1    48   1    883_LSTM_init_c_bf16
+173  318976    512       bf16    1    1    32   8    883_LSTM883_LSTM_sigmoid_table_bf16
+174  318464    512       bf16    1    1    32   8    883_LSTM883_LSTM_sigmoid_slope_table_bf16
+175  2205872   512       bf16    1    1    32   8    883_LSTM883_LSTM_tanh_table_bf16
+176  317952    512       bf16    1    1    32   8    883_LSTM883_LSTM_tanh_slope_table_bf16
+177  447952    18432     bf16    48   192  1    1    883_LSTM_fc883_LSTM_filter_trans_bf16
+178  2232016   1536      int32   2    192  1    1    943_LSTM_w_bias
+179  261120    36864     bf16    2    192  48   1    943_LSTM939_bf16
+180  259584    1536      int32   2    192  1    1    943_LSTM_r_bias
+181  2231600   192       bf16    2    1    48   1    943_LSTM_init_h_bf16
+182  2231600   192       bf16    2    1    48   1    943_LSTM_init_c_bf16
+183  318976    512       bf16    1    1    32   8    943_LSTM943_LSTM_sigmoid_table_bf16
+184  318464    512       bf16    1    1    32   8    943_LSTM943_LSTM_sigmoid_slope_table_bf16
+185  2205872   512       bf16    1    1    32   8    943_LSTM943_LSTM_tanh_table_bf16
+186  317952    512       bf16    1    1    32   8    943_LSTM943_LSTM_tanh_slope_table_bf16
+187  38400     221184    bf16    288  384  1    1    943_LSTM_fc943_LSTM_filter_trans_bf16
+188  36864     1536      int32   2    192  1    1    994_LSTM_w_bias
+189  0         36864     bf16    2    192  48   1    994_LSTM990_bf16
+190  530128    1536      int32   2    192  1    1    994_LSTM_r_bias
+191  2231600   192       bf16    2    1    48   1    994_LSTM_init_h_bf16
+192  2231600   192       bf16    2    1    48   1    994_LSTM_init_c_bf16
+193  318976    512       bf16    1    1    32   8    994_LSTM994_LSTM_sigmoid_table_bf16
+194  318464    512       bf16    1    1    32   8    994_LSTM994_LSTM_sigmoid_slope_table_bf16
+195  2205872   512       bf16    1    1    32   8    994_LSTM994_LSTM_tanh_table_bf16
+196  317952    512       bf16    1    1    32   8    994_LSTM994_LSTM_tanh_slope_table_bf16
+197  2355456   73728     bf16    96   384  1    1    994_LSTM_fc994_LSTM_filter_trans_bf16
+198  2206416   22124     int32   5531 1    1    1    422
+199  608016    1592928   bf16    144  5531 1    1    1015_Gemm421_fix_bf16
+
+Program #0
+    batch_num   : 0
+    private_gmem_size: 0
+    shared_gmem_size: 908000
+    inputs      : input_raw
+    outputs     : out_Reshape_f32
+    routines    :
+     #00  tpu
+        inputs  : input_raw
+        outputs : out_Reshape_f32
+        section : subfunc_0
+
+    tensor_map  :
+        ID   OFFSET      TYPE  N    C    H    W    QSCALE     MEM     NAME
+        000  0           uint8 1    32   320  3    1.000000   io_mem  input_raw
+        001  0           uint8 1    3    32   320  1.000000   shared  input_preprocess_tranpose
+        002  40960       bf16  1    3    32   320  1.000000   shared  input_rawinput_preprocess_bf16
+        003  102400      bf16  1    8    16   160  1.000000   shared  425_Relu
+        004  0           bf16  1    4    16   160  1.000000   shared  428_Relu
+        005  20480       bf16  1    4    16   160  1.000000   shared  431_Relu
+        006  0           bf16  1    8    16   160  1.000000   shared  432_Concat
+        007  40976       bf16  1    8    8    160  1.000000   shared  433_Conv
+        008  40960       bf16  1    8    1    1    1.000000   shared  441_GlobalAveragePool
+        009  40960       bf16  1    8    1    1    1.000000   shared  445_Reshape
+        010  0           bf16  1    2    1    1    1.000000   shared  447_Relu
+        011  16          bf16  1    8    1    1    1.000000   shared  448_Gemm_top.Relu_0
+        012  32          bf16  1    8    1    1    1.000000   shared  448_Gemm_top.Relu
+        013  32          bf16  1    8    1    1    1.000000   shared  448_Gemm_top.Relu_top.Reshape
+        014  61456       bf16  1    8    8    160  1.000000   shared  458_Mul
+        015  0           bf16  1    4    8    160  1.000000   shared  459_Conv
+        016  10240       bf16  1    4    8    160  1.000000   shared  461_Conv
+        017  0           bf16  1    8    8    160  1.000000   shared  463_Concat
+        018  20480       bf16  1    8    8    160  1.000000   shared  467_Conv
+        019  215040      bf16  1    8    8    160  1.000000   shared  469_Add
+        020  71680       bf16  1    28   8    160  1.000000   shared  472_Relu
+        021  143360      bf16  1    28   8    160  1.000000   shared  475_Relu
+        022  71680       bf16  1    56   8    160  1.000000   shared  476_Concat
+        023  0           bf16  1    56   4    160  1.000000   shared  477_Conv
+        024  71680       bf16  1    6    4    160  1.000000   shared  479_Conv
+        025  79360       bf16  1    6    4    160  1.000000   shared  481_Conv
+        026  71680       bf16  1    12   4    160  1.000000   shared  483_Concat
+        027  0           bf16  1    12   4    160  1.000000   shared  489_Add
+        028  87040       bf16  1    22   4    160  1.000000   shared  492_Relu
+        029  115200      bf16  1    22   4    160  1.000000   shared  495_Relu
+        030  87040       bf16  1    44   4    160  1.000000   shared  496_Concat
+        031  15360       bf16  1    6    4    160  1.000000   shared  497_Conv
+        032  23040       bf16  1    6    4    160  1.000000   shared  499_Conv
+        033  15360       bf16  1    12   4    160  1.000000   shared  501_Concat
+        034  531184      bf16  1    12   4    160  1.000000   shared  502_Add
+        035  51200       bf16  1    40   4    160  1.000000   shared  505_Relu
+        036  102400      bf16  1    40   4    160  1.000000   shared  508_Relu
+        037  51200       bf16  1    80   4    160  1.000000   shared  509_Concat
+        038  0           bf16  1    80   2    160  1.000000   shared  510_Conv
+        039  51200       bf16  1    80   1    1    1.000000   shared  518_GlobalAveragePool
+        040  51200       bf16  1    80   1    1    1.000000   shared  522_Reshape
+        041  51360       bf16  1    20   1    1    1.000000   shared  524_Relu
+        042  51408       bf16  1    80   1    1    1.000000   shared  525_Gemm_top.Relu_0
+        043  51568       bf16  1    80   1    1    1.000000   shared  525_Gemm_top.Relu
+        044  51568       bf16  1    80   1    1    1.000000   shared  525_Gemm_top.Relu_top.Reshape
+        045  51728       bf16  1    80   2    160  1.000000   shared  535_Mul
+        046  0           bf16  1    10   2    160  1.000000   shared  536_Conv
+        047  6400        bf16  1    10   2    160  1.000000   shared  538_Conv
+        048  0           bf16  1    20   2    160  1.000000   shared  540_Concat
+        049  467184      bf16  1    20   2    160  1.000000   shared  546_Add
+        050  77584       bf16  1    60   2    160  1.000000   shared  549_Relu
+        051  115984      bf16  1    60   2    160  1.000000   shared  552_Relu
+        052  77584       bf16  1    120  2    160  1.000000   shared  553_Concat
+        053  0           bf16  1    120  1    1    1.000000   shared  560_GlobalAveragePool
+        054  0           bf16  1    120  1    1    1.000000   shared  564_Reshape
+        055  240         bf16  1    30   1    1    1.000000   shared  566_Relu
+        056  304         bf16  1    120  1    1    1.000000   shared  567_Gemm_top.Relu_0
+        057  544         bf16  1    120  1    1    1.000000   shared  567_Gemm_top.Relu
+        058  544         bf16  1    120  1    1    1.000000   shared  567_Gemm_top.Relu_top.Reshape
+        059  784         bf16  1    120  2    160  1.000000   shared  577_Mul
+        060  77584       bf16  1    10   2    160  1.000000   shared  578_Conv
+        061  83984       bf16  1    10   2    160  1.000000   shared  580_Conv
+        062  77584       bf16  1    20   2    160  1.000000   shared  582_Concat
+        063  403184      bf16  1    20   2    160  1.000000   shared  583_Add
+        064  0           bf16  1    60   2    160  1.000000   shared  586_Relu
+        065  38400       bf16  1    60   2    160  1.000000   shared  589_Relu
+        066  0           bf16  1    120  2    160  1.000000   shared  590_Concat
+        067  76800       bf16  1    120  1    1    1.000000   shared  597_GlobalAveragePool
+        068  76800       bf16  1    120  1    1    1.000000   shared  601_Reshape
+        069  77040       bf16  1    30   1    1    1.000000   shared  603_Relu
+        070  77104       bf16  1    120  1    1    1.000000   shared  604_Gemm_top.Relu_0
+        071  77344       bf16  1    120  1    1    1.000000   shared  604_Gemm_top.Relu
+        072  77344       bf16  1    120  1    1    1.000000   shared  604_Gemm_top.Relu_top.Reshape
+        073  77584       bf16  1    120  2    160  1.000000   shared  614_Mul
+        074  0           bf16  1    10   2    160  1.000000   shared  615_Conv
+        075  6400        bf16  1    10   2    160  1.000000   shared  617_Conv
+        076  0           bf16  1    20   2    160  1.000000   shared  619_Concat
+        077  307680      bf16  1    20   2    160  1.000000   shared  620_Add
+        078  46560       bf16  1    36   2    160  1.000000   shared  623_Relu
+        079  69600       bf16  1    36   2    160  1.000000   shared  626_Relu
+        080  46560       bf16  1    72   2    160  1.000000   shared  627_Concat
+        081  0           bf16  1    72   1    1    1.000000   shared  634_GlobalAveragePool
+        082  0           bf16  1    72   1    1    1.000000   shared  638_Reshape
+        083  144         bf16  1    18   1    1    1.000000   shared  640_Relu
+        084  192         bf16  1    72   1    1    1.000000   shared  641_Gemm_top.Relu_0
+        085  336         bf16  1    72   1    1    1.000000   shared  641_Gemm_top.Relu
+        086  336         bf16  1    72   1    1    1.000000   shared  641_Gemm_top.Relu_top.Reshape
+        087  480         bf16  1    72   2    160  1.000000   shared  651_Mul
+        088  46560       bf16  1    12   2    160  1.000000   shared  652_Conv
+        089  269280      bf16  1    24   2    160  1.000000   shared  662_Add
+        090  0           bf16  1    36   2    160  1.000000   shared  665_Relu
+        091  23040       bf16  1    36   2    160  1.000000   shared  668_Relu
+        092  0           bf16  1    72   2    160  1.000000   shared  669_Concat
+        093  46080       bf16  1    72   1    1    1.000000   shared  676_GlobalAveragePool
+        094  46080       bf16  1    72   1    1    1.000000   shared  680_Reshape
+        095  46224       bf16  1    18   1    1    1.000000   shared  682_Relu
+        096  46272       bf16  1    72   1    1    1.000000   shared  683_Gemm_top.Relu_0
+        097  46416       bf16  1    72   1    1    1.000000   shared  683_Gemm_top.Relu
+        098  46416       bf16  1    72   1    1    1.000000   shared  683_Gemm_top.Relu_top.Reshape
+        099  46560       bf16  1    72   2    160  1.000000   shared  693_Mul
+        100  0           bf16  1    12   2    160  1.000000   shared  694_Conv
+        101  184320      bf16  1    24   2    160  1.000000   shared  699_Add
+        102  0           bf16  1    144  2    160  1.000000   shared  702_Relu
+        103  92160       bf16  1    144  2    160  1.000000   shared  705_Relu
+        104  0           bf16  1    288  2    160  1.000000   shared  706_Concat
+        105  199680      bf16  1    288  1    160  1.000000   shared  707_Conv
+        106  0           bf16  1    288  1    1    1.000000   shared  715_GlobalAveragePool
+        107  0           bf16  1    288  1    1    1.000000   shared  719_Reshape
+        108  576         bf16  1    72   1    1    1.000000   shared  721_Relu
+        109  720         bf16  1    288  1    1    1.000000   shared  722_Gemm_top.Relu_0
+        110  1296        bf16  1    288  1    1    1.000000   shared  722_Gemm_top.Relu
+        111  1296        bf16  1    288  1    1    1.000000   shared  722_Gemm_top.Relu_top.Reshape
+        112  1872        bf16  1    288  1    160  1.000000   shared  732_Mul
+        113  94032       bf16  1    24   1    160  1.000000   shared  733_Conv
+        114  0           bf16  1    48   1    160  1.000000   shared  743_Add
+        115  15360       bf16  1    144  1    160  1.000000   shared  746_Relu
+        116  61440       bf16  1    144  1    160  1.000000   shared  749_Relu
+        117  15360       bf16  1    288  1    160  1.000000   shared  750_Concat
+        118  107520      bf16  1    288  1    1    1.000000   shared  757_GlobalAveragePool
+        119  107520      bf16  1    288  1    1    1.000000   shared  761_Reshape
+        120  108096      bf16  1    72   1    1    1.000000   shared  763_Relu
+        121  107520      bf16  1    288  1    1    1.000000   shared  764_Gemm_top.Relu_0
+        122  199680      bf16  1    288  1    1    1.000000   shared  764_Gemm_top.Relu
+        123  199680      bf16  1    288  1    1    1.000000   shared  764_Gemm_top.Relu_top.Reshape
+        124  107520      bf16  1    288  1    160  1.000000   shared  774_Mul
+        125  15360       bf16  1    24   1    160  1.000000   shared  775_Conv
+        126  176640      bf16  1    48   1    160  1.000000   shared  780_Add
+        127  0           bf16  1    144  1    160  1.000000   shared  783_Relu
+        128  46080       bf16  1    144  1    160  1.000000   shared  786_Relu
+        129  0           bf16  1    288  1    160  1.000000   shared  787_Concat
+        130  192000      bf16  1    288  1    1    1.000000   shared  794_GlobalAveragePool
+        131  192000      bf16  1    288  1    1    1.000000   shared  798_Reshape
+        132  192576      bf16  1    72   1    1    1.000000   shared  800_Relu
+        133  192000      bf16  1    288  1    1    1.000000   shared  801_Gemm_top.Relu_0
+        134  284160      bf16  1    288  1    1    1.000000   shared  801_Gemm_top.Relu
+        135  284160      bf16  1    288  1    1    1.000000   shared  801_Gemm_top.Relu_top.Reshape
+        136  192000      bf16  1    288  1    160  1.000000   shared  811_Mul
+        137  0           bf16  1    24   1    160  1.000000   shared  812_Conv
+        138  92160       bf16  1    48   1    160  1.000000   shared  817_Add
+        139  0           bf16  1    288  1    160  1.000000   shared  820_Relu
+        140  92160       bf16  1    288  1    80   1.000000   shared  821_MaxPool
+        141  92160       bf16  1    288  80   1    1.000000   shared  822_Squeeze
+        142  0           bf16  80   1    288  1    1.000000   shared  823_Transpose
+        143  46080       bf16  80   1    192  1    1.000000   shared  857_LSTM_fc
+        144  76800       bf16  80   1    1    48   1.000000   shared  857_LSTM
+        145  76800       bf16  80   1    48   1    1.000000   shared  860_Squeeze
+        146  46080       bf16  80   1    192  1    1.000000   shared  883_LSTM_fc
+        147  107520      bf16  80   1    1    48   1.000000   shared  883_LSTM
+        148  107520      bf16  80   1    48   1    1.000000   shared  886_Squeeze
+        149  46080       bf16  80   1    384  1    1.000000   shared  943_LSTM_fc
+        150  0           bf16  80   2    1    48   1.000000   shared  943_LSTM
+        151  0           bf16  80   1    96   1    1.000000   shared  948_Reshape
+        152  15360       bf16  80   1    384  1    1.000000   shared  994_LSTM_fc
+        153  76800       bf16  80   2    1    48   1.000000   shared  994_LSTM
+        154  76800       bf16  80   1    96   1    1.000000   shared  999_Reshape
+        155  0           bf16  80   1    144  1    1.000000   shared  1000_Concat
+        156  0           bf16  80   144  1    1    1.000000   shared  1014_Reshape
+        157  23040       bf16  80   5531 1    1    1.000000   shared  1015_Gemm
+        158  23040       bf16  80   1    5531 1    1.000000   shared  out_Reshape
+        159  0           fp32  80   1    5531 1    1.000000   io_mem  out_Reshape_f32
