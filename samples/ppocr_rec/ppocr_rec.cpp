@@ -87,17 +87,15 @@ int main(int argc, char *argv[]) {
   // preprocess (resize)
   ts_start = clock();
   Mat cvs;
-  if (true) {
-    // just resize, since padding this input will cause wrong predict??!
-    resize(im, cvs, Size(REC_IMG_WIDTH, REC_IMG_HEIGHT));
-  } else {
-    int W = im.cols, H = im.rows;       // fix H to 48
-    int W_resize = min(W * REC_IMG_HEIGHT / H, REC_IMG_WIDTH);
-    if (W != W_resize || H != REC_IMG_HEIGHT)
-      resize(im, im, Size(W_resize, REC_IMG_HEIGHT));
-    cvs = Mat::zeros(REC_IMG_HEIGHT, REC_IMG_WIDTH, CV_8UC3);
-    im.copyTo(cvs(Rect(0, 0, W_resize, REC_IMG_HEIGHT)));
-  }
+  resize(im, cvs, Size(REC_IMG_WIDTH, REC_IMG_HEIGHT));
+  /* Note: cannot right pad this model, do not know why...
+  int W = im.cols, H = im.rows;
+  int W_resize = min(W * REC_IMG_HEIGHT / H, REC_IMG_WIDTH);
+  if (W != W_resize || H != REC_IMG_HEIGHT)
+    resize(im, im, Size(W_resize, REC_IMG_HEIGHT));
+  Mat cvs = Mat(REC_IMG_HEIGHT, REC_IMG_WIDTH, CV_8UC3, Scalar::all(255));
+  im.copyTo(cvs(Rect(0, 0, W_resize, REC_IMG_HEIGHT)));
+  */
   printf("preprocess: %d clock\n", clock() - ts_start);
 
   // write to input tensor (uint8)

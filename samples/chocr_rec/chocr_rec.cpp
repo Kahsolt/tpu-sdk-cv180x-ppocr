@@ -106,7 +106,7 @@ int main(int argc, char *argv[]) {
   printf("model forward: %d clock\n", clock() - ts_start);
 
   // read from output tensor (float32)
-  float_t *logits = (float_t *) CVI_NN_TensorPtr(output);   // [B=1, L=160, D=6625, X=1]
+  float_t *logits = (float_t *) CVI_NN_TensorPtr(output);   // [L=80, X=1, D=5531, X=1]
 
   // post-process: argmax()
   ts_start = clock();
