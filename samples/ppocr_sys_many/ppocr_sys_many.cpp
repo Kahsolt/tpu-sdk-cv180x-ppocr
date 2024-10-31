@@ -1,37 +1,33 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <dirent.h>
-#include <sys/time.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include <stdlib.h>     // qsort()
+#include <dirent.h>     // pendir()
+#include <sys/time.h>   // gettimeofday()
+#include <sys/stat.h>   // mkdir()
 #include <vector>
 #include <cviruntime.h>
 #include <opencv2/opencv.hpp>
 
 using namespace cv;
-using namespace std;
+using std::vector;
 
 // ppocr pipeline on folder: det + rec
 // https://blog.csdn.net/u012351051/article/details/109372643
 
 #pragma region def
-typedef vector<Point> Contour;
-typedef vector<Point> Box;
-
 #define min(x, y) (((x) <= (y)) ? (x) : (y))
 #define max(x, y) (((x) >= (y)) ? (x) : (y))
-#define clip(x, a, b) min(max((x), (a)), (b))
-#define us_to_ms(x) (double(x) / 1000)
+#define us_to_ms(x) (float(x) / 1000)
 
 #define DET_IMG_SIZE      640
-#define DET_SEG_THRESH    0.6
-#define DET_MAX_BOXES     10
-#define DET_MIN_SIZE      7
+#define DET_SEG_THRESH    0.3
+#define DET_MAX_BOXES     100
+#define DET_MIN_SIZE      3
 #define DET_UNCLIP_K      2.7
 #define DET_UNCLIP_T      1.414
 #define DET_QSCALE        127
 #define REC_IMG_WIDTH     320
 #define REC_IMG_HEIGHT    32
+#define REC_IMG_CROP_MIN  16
 #define REC_LOGIT_NINF    -114514191981.0
 
 #define SAVE_FILE_PATH    "results.txt"
@@ -120,9 +116,14 @@ int main(int argc, char *argv[]) {
   #pragma region process
   // recyclable vars
   Mat im, im_crop, cvs, bitmap;
-  vector<Contour> contours;
-  vector<Box> boxes;
-  vector<Point2f> pts;
+  vector<vector<Point>> contours; // findContours
+  RotatedRect bbox;               // minAreaRect
+  Point2f tmp[4];                 // boundingRect
+  vector<vector<Point>> boxes;
+  vector<Point> box(4);
+  vector<Point2f> pts(4);         // getPerspectiveTransform
+  vector<Point2f> pts_std(4);
+  Mat M;                          // warpPerspective
   // fs & write
   FILE* fout = fopen(SAVE_FILE_PATH, "w");
   struct dirent *entry;
@@ -132,10 +133,7 @@ int main(int argc, char *argv[]) {
     if (entry->d_name[0] == '.') continue;
 
     // write
-    memset(fp, 0x00, sizeof(fp));
-    strcpy(fp, base_path);
-    strcat(fp, "/");
-    strcat(fp, entry->d_name);
+    sprintf(fp, "%s/%s\0", base_path, entry->d_name);
     fprintf(fout, "%s\n", entry->d_name);
     putchar('.'); fflush(stdout);
     n_img++;
@@ -157,11 +155,11 @@ int main(int argc, char *argv[]) {
     int W = im.cols, H = im.rows;
     int size_max = max(W, H);
     cvs = Mat::zeros(DET_IMG_SIZE, DET_IMG_SIZE, CV_8UC3);
-    double det_r = double(size_max) / DET_IMG_SIZE;
+    float det_r = float(size_max) / DET_IMG_SIZE;
     if (size_max > DET_IMG_SIZE) {
       int W_resize = W / det_r, 
           H_resize = H / det_r;
-      resize(im, im, Size(W_resize, H_resize));   // inplace!
+      resize(im, im, {W_resize, H_resize});   // inplace!
       im.copyTo(cvs(Rect(0, 0, W_resize, H_resize)));
     } else {
       im.copyTo(cvs(Rect(0, 0, W, H)));
@@ -182,11 +180,10 @@ int main(int argc, char *argv[]) {
     bitmap = Mat(DET_IMG_SIZE, DET_IMG_SIZE, CV_8SC1, plogits) >= int8_t(DET_SEG_THRESH * DET_QSCALE);
 
 #ifdef DEBUG_DUMP_DET
-    sprintf(dump_fp, "%s/bitmap-%d.png\0", SAVE_DIR_PATH, n_img);
+    sprintf(dump_fp, "%s/%s\0", SAVE_DIR_PATH, entry->d_name);
     imwrite(dump_fp, bitmap);
 #endif
 
-    contours.clear();
     findContours(bitmap, contours, RETR_LIST, CHAIN_APPROX_SIMPLE);
     int n_contours = min(contours.size(), DET_MAX_BOXES);
     boxes.clear();
@@ -194,26 +191,25 @@ int main(int argc, char *argv[]) {
       auto contour = contours[i];
       if (contour.size() < 4) continue;
       // contour to rect box
-      RotatedRect bbox = minAreaRect(contour);
+      bbox = minAreaRect(contour);
       int w = bbox.size.width, h = bbox.size.height;
       if (min(w, h) < DET_MIN_SIZE) continue;
-      Point2f tmp[4]; bbox.points(tmp); // native order: bottomLeft, topLeft, topRight, bottomRight, but not stable
+      bbox.points(tmp); // native order: bottomLeft, topLeft, topRight, bottomRight, but not stable
       // sorted order: top-left, top-right, bottom-right, bottom-left
       qsort(tmp, 4, sizeof(Point2f), point_cmp);
-      int idx_0 = 0, idx_1 = 1, idx_2 = 2, idx_3 = 3;
+      int idx_0, idx_1, idx_2, idx_3;
       if (tmp[1].y > tmp[0].y) { idx_0 = 0; idx_3 = 1; }
       else                     { idx_0 = 1; idx_3 = 0; }
       if (tmp[3].y > tmp[2].y) { idx_1 = 2; idx_2 = 3; }
       else                     { idx_1 = 3; idx_2 = 2; }
-      Box box = { tmp[idx_0], tmp[idx_1], tmp[idx_2], tmp[idx_3] };
+      box[0] = tmp[idx_0]; box[1] = tmp[idx_1]; box[2] = tmp[idx_2]; box[3] = tmp[idx_3]; // dtype cvt
       // box unclip (this is our magic :)
-      double w_h = w + h, wh = w * h;
-      double t = (sqrt(w_h * w_h + 4 * (DET_UNCLIP_K - 1) * wh) - w_h) / 4 * DET_UNCLIP_T;
-      int n_pts = box.size();
-      for (int  i = 0 ; i < n_pts ; i++) {
-        Point &p = box[i];
-        Point &p_L = box[(i - 1 + n_pts) % n_pts];
-        Point &p_R = box[(i + 1)         % n_pts];
+      float w_h = w + h, wh = w * h;
+      float t = (sqrt(w_h * w_h + 4 * (DET_UNCLIP_K - 1) * wh) - w_h) / 4 * DET_UNCLIP_T;
+      for (int i = 0 ; i < 4 ; i++) {
+        Point &p   = box[i];
+        Point &p_L = box[(i + 3) % 4];
+        Point &p_R = box[(i + 1) % 4];
         Point v_L = p_L - p; v_L /= norm(v_L);
         Point v_R = p_R - p; v_R /= norm(v_R);
         Point2f v = (v_L + v_R) * t;
@@ -221,36 +217,34 @@ int main(int argc, char *argv[]) {
       }
       boxes.emplace_back(box);
     }
+    contours.clear();
     gettimeofday(&tv_end, NULL);
     ts_det_post += timeval_to_us(tv_start, tv_end);
     #pragma endregion det
 
     #pragma region rec
     for (int b = 0 ; b < boxes.size() ; b++) {
-      Box &box = boxes[b];
+      vector<Point> &box = boxes[b];
       n_crop++;
 
       // crop
       gettimeofday(&tv_start, NULL);
-      pts.clear();
-      for (auto &p : box) pts.emplace_back(p);
-      float img_crop_width  = max(16, max(norm(box[0] - box[1]), norm(box[2] - box[3])));
-      float img_crop_height = max(16, max(norm(box[0] - box[3]), norm(box[1] - box[2])));
-      vector<Point2f> pts_std = {
-        {0,              0}, 
-        {img_crop_width, 0}, 
-        {img_crop_width, img_crop_height}, 
-        {0,              img_crop_height}
-      };
-      auto M = getPerspectiveTransform(pts, pts_std);
-      warpPerspective(im, im_crop, M, Size(img_crop_width, img_crop_height), INTER_CUBIC, BORDER_REPLICATE);
-      if (float(im_crop.rows) / im_crop.cols >= 1.5)
+      float im_crop_w = max(REC_IMG_CROP_MIN, max(norm(box[0] - box[1]), norm(box[2] - box[3])));
+      float im_crop_h = max(REC_IMG_CROP_MIN, max(norm(box[0] - box[3]), norm(box[1] - box[2])));
+      pts_std[0] = {0.0,       0.0};
+      pts_std[1] = {im_crop_w, 0.0};
+      pts_std[2] = {im_crop_w, im_crop_h};
+      pts_std[3] = {0.0,       im_crop_h};
+      pts[0] = box[0]; pts[1] = box[1]; pts[2] = box[2]; pts[3] = box[3]; // dtype cvt
+      M = getPerspectiveTransform(pts, pts_std);
+      warpPerspective(im, im_crop, M, {im_crop_w, im_crop_h}, INTER_CUBIC, BORDER_REPLICATE);
+      if (2 * im_crop.rows >= 3 * im_crop.cols)   // H / W >= 1.5
         rotate(im_crop, im_crop, ROTATE_90_COUNTERCLOCKWISE);
       gettimeofday(&tv_end, NULL);
       ts_img_crop += timeval_to_us(tv_start, tv_end);
 
 #ifdef DEBUG_DUMP_REC
-      sprintf(dump_fp, "%s/crop-%d.png\0", SAVE_DIR_PATH, n_crop);
+      sprintf(dump_fp, "%s/%s-%d.png\0", SAVE_DIR_PATH, entry->d_name, n_crop);
       imwrite(dump_fp, im_crop);
 #endif
 
@@ -259,7 +253,7 @@ int main(int argc, char *argv[]) {
       int W_crop = im_crop.cols, H_crop = im_crop.rows;
       int W_resize = min(W_crop * REC_IMG_HEIGHT / H_crop, REC_IMG_WIDTH);
       if (W_crop != W_resize || H_crop != REC_IMG_HEIGHT)
-        resize(im_crop, im_crop, Size(W_resize, REC_IMG_HEIGHT));
+        resize(im_crop, im_crop, {W_resize, REC_IMG_HEIGHT});
       cvs = Mat(REC_IMG_HEIGHT, REC_IMG_WIDTH, CV_8UC3, Scalar::all(255));
       im_crop.copyTo(cvs(Rect(0, 0, W_resize, REC_IMG_HEIGHT)));
       gettimeofday(&tv_end, NULL);
@@ -274,12 +268,11 @@ int main(int argc, char *argv[]) {
       ts_rec_infer += timeval_to_us(tv_start, tv_end);
 
       // box rescale back & write (NOTE: `box` is not used after this)
-      if (size_max > DET_IMG_SIZE) {
+      if (size_max > DET_IMG_SIZE)
         for (auto &p : box) {
           p.x *= det_r;
           p.y *= det_r;
         }
-      }
       for (auto &p : box)
         fprintf(fout, "%d %d ", p.x, p.y);
       fputc('|', fout);
@@ -298,7 +291,6 @@ int main(int argc, char *argv[]) {
             idx = i;
           }
         }
-        if (idx == -1) break;
         if (idx != 0 && idx != last_idx) {
           fprintf(fout, " %d", idx);
           last_idx = idx;

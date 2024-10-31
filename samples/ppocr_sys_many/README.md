@@ -5,13 +5,14 @@
 性能优化建议:
 
   - 使用更小的 det 模型
-  - 设置更大的 `DET_MIN_SIZE`
+  - 设置更大的 `DET_MIN_SIZE` (查全率受损!)
   - 不启用 `DEBUG_DUMP_*` 
 
 使用自定义的 cvimodel 模型：
 
   - 检查 `DET_IMG_SIZE`, `REC_IMG_WIDTH`, `REC_IMG_HEIGHT` 设置是否与模型编译规格一致
   - 检查 `CVI_NN_TensorPtr` 返回值类型是否与模型编译规格一致
+  - 检查 `L` 和 `D` 的索引位置是否与模型编译规格一致
 
 ```shell
 # compile runtime
@@ -48,27 +49,27 @@ version: 1.4.0
 ppocr_mb_rec Build at 2024-10-31 19:56:20 For platform cv180x
 Max SharedMem size:1075360
 find shared memory(8793600),  saved:1075360 
-ts_model_load: 768.000 ms
+ts_model_load: 861.625 ms
 >> progress: ...................
-ts_model_unload: 96.000 ms
+ts_model_unload: 98.313 ms
 ================================
 n_img:        19
-n_crop:       40
+n_crop:       145
 --------------------------------
-ts_img_load:  3685.632 ms
-ts_img_crop:  320.168 ms
-ts_det_pre:   1674.590 ms
-ts_det_infer: 4603.578 ms
-ts_det_post:  431.149 ms
-ts_rec_pre:   63.767 ms
-ts_rec_infer: 1331.415 ms
-ts_rec_post:  676.561 ms
+ts_img_load:  3601.535 ms
+ts_img_crop:  615.459 ms
+ts_det_pre:   1618.865 ms
+ts_det_infer: 4618.099 ms
+ts_det_post:  380.009 ms
+ts_rec_pre:   173.113 ms
+ts_rec_infer: 4836.261 ms
+ts_rec_post:  857.765 ms
 --------------------------------
-ts_avg_pre:   91.492 ms
-ts_avg_infer: 312.368 ms
-ts_avg_post:  58.301 ms
+ts_avg_pre:   94.315 ms
+ts_avg_infer: 497.598 ms
+ts_avg_post:  65.146 ms
 ================================
-Total time:   13720.000 ms
+Total time:   17722.326 ms
 ```
 
 ⚪ ppocrv2_det + ppocr_mb_rec
@@ -82,27 +83,27 @@ version: 1.4.0
 ppocr_mb_rec Build at 2024-10-31 19:56:20 For platform cv180x
 Max SharedMem size:1075360
 find shared memory(8179200),  saved:1075360 
-ts_model_load: 760.000 ms
+ts_model_load: 1266.375 ms
 >> progress: ...................
-ts_model_unload: 96.000 ms
+ts_model_unload: 91.480 ms
 ================================
 n_img:        19
-n_crop:       50
+n_crop:       137
 --------------------------------
-ts_img_load:  3623.653 ms
-ts_img_crop:  307.992 ms
-ts_det_pre:   1688.924 ms
-ts_det_infer: 4217.506 ms
-ts_det_post:  365.775 ms
-ts_rec_pre:   76.005 ms
-ts_rec_infer: 1665.869 ms
-ts_rec_post:  845.795 ms
+ts_img_load:  3714.881 ms
+ts_img_crop:  476.227 ms
+ts_det_pre:   1849.673 ms
+ts_det_infer: 4250.347 ms
+ts_det_post:  433.215 ms
+ts_rec_pre:   160.201 ms
+ts_rec_infer: 4566.401 ms
+ts_rec_post:  809.094 ms
 --------------------------------
-ts_avg_pre:   92.891 ms
-ts_avg_infer: 309.651 ms
-ts_avg_post:  63.767 ms
+ts_avg_pre:   105.783 ms
+ts_avg_infer: 464.039 ms
+ts_avg_post:  65.385 ms
 ================================
-Total time:   13688.000 ms
+Total time:   17684.490 ms
 ```
 
 ⚪ ppocr_mb_det + ppocr_mb_rec
@@ -116,25 +117,25 @@ version: 1.4.0
 ppocr_mb_rec Build at 2024-10-31 19:56:20 For platform cv180x
 Max SharedMem size:1075360
 find shared memory(8179200),  saved:1075360 
-ts_model_load: 696.000 ms
+ts_model_load: 727.375 ms
 >> progress: ...................
-ts_model_unload: 96.000 ms
+ts_model_unload: 134.683 ms
 ================================
 n_img:        19
-n_crop:       41
+n_crop:       95
 --------------------------------
-ts_img_load:  3799.978 ms
-ts_img_crop:  343.423 ms
-ts_det_pre:   1860.028 ms
-ts_det_infer: 4256.473 ms
-ts_det_post:  594.212 ms
-ts_rec_pre:   70.038 ms
-ts_rec_infer: 1366.016 ms
-ts_rec_post:  693.169 ms
+ts_img_load:  3529.004 ms
+ts_img_crop:  413.481 ms
+ts_det_pre:   1647.848 ms
+ts_det_infer: 4244.373 ms
+ts_det_post:  321.652 ms
+ts_rec_pre:   117.571 ms
+ts_rec_infer: 3163.786 ms
+ts_rec_post:  561.299 ms
 --------------------------------
-ts_avg_pre:   101.582 ms
-ts_avg_infer: 295.920 ms
-ts_avg_post:  67.757 ms
+ts_avg_pre:   92.917 ms
+ts_avg_infer: 389.903 ms
+ts_avg_post:  46.471 ms
 ================================
-Total time:   13848.000 ms
+Total time:   14942.379 ms
 ```

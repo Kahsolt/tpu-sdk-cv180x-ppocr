@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
+set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Ofast")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
+
 if(NOT DEFINED TPU_SDK_PATH)
   message(FATAL_ERROR "Please set TPU_SDK_PATH to point to the TPU_SDK installation")
 endif()

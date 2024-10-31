@@ -38,6 +38,7 @@ def handle_seg():
       'transcription': ''.join([vocab[e] for e in ids]),
       'points': list(zip(box[::2], box[1::2])),
     })
+  annots.sort(key=lambda e: e['transcription'])
   seg.clear()
 
 for line in lines:
