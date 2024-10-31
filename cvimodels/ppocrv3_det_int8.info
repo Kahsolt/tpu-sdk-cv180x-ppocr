@@ -1,13 +1,13 @@
 Mlir Version: v1.3.228-g19ca95e9-20230921
 Cvimodel Version: 1.4.0
-ppocrv3_det Build at 2024-10-30 01:16:55
+ppocrv3_det Build at 2024-10-31 18:52:24
 For cv180x chip ONLY
 CviModel Need ION Memory Size: (14.10 MB)
 
 Sections:
 ID   TYPE      NAME                     SIZE        OFFSET      MD5
 000  weight    weight                   643616      0           ecb7ec7305c7f34cedc8e855a622b85f
-001  cmdbuf    subfunc_0                3713040     643616      183224d122bda6507302b7c7b44ee02c
+001  cmdbuf    subfunc_0                3713040     643616      1960f6d675c13e31c1f30fc97b3e4e6a
 
 WeightMap:
 ID   OFFSET    SIZE      TYPE    N    C    H    W    NAME
