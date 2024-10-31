@@ -27,11 +27,11 @@ scp /path/to/img/gt_100*.jpg root@192.168.42.1:/dataset/train_full_images_0   # 
 # run on chip
 source ./envs_tpu_sdk.sh
 cd samples
-
-./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocrv4_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0   # OOM
-./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocrv3_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0
-./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocrv2_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0
-./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocr_mb_det_int8.cvimodel ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0
+# run with the highest priority! :)
+nice -n -19 ./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocrv4_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0   # OOM
+nice -n -19 ./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocrv3_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0
+nice -n -19 ./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocrv2_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0
+nice -n -19 ./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocr_mb_det_int8.cvimodel ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0
 
 # run on host
 scp -r root@192.168.42.1:/root/tpu-sdk-cv180x-ocr/samples/results .
@@ -42,104 +42,101 @@ python convert_results.py ./results.txt
 ⚪ ppocrv3_det + chocr_rec
 
 ```shell
-[root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocrv3_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel 
-/dataset/train_full_images_0
+[root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# nice -n -19 ./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocrv3_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0
 version: 1.4.0
-ppocrv3_det Build at 2024-10-30 18:47:08 For platform cv180x
+ppocrv3_det Build at 2024-10-31 18:52:24 For platform cv180x
 Max SharedMem size:8793600
 version: 1.4.0
-chocr_rec Build at 2024-10-30 19:45:05 For platform cv180x
+chocr_rec Build at 2024-10-31 18:05:38 For platform cv180x
 Max SharedMem size:908000
 find shared memory(8793600),  saved:908000 
-ts_model_load: 916.000 ms
+ts_model_load: 860.000 ms
 >> progress: ...................
-ts_model_unload: 108.000 ms
+ts_model_unload: 92.000 ms
 ================================
 n_img:        19
 n_crop:       40
 --------------------------------
-ts_img_load:  4501.404 ms
-ts_img_crop:  458.962 ms
-ts_det_pre:   2299.035 ms
-ts_det_infer: 4738.777 ms
-ts_det_post:  1110.852 ms
-ts_rec_pre:   67.053 ms
-ts_rec_infer: 914.731 ms
-ts_rec_post:  571.862 ms
+ts_img_load:  3598.220 ms
+ts_img_crop:  317.727 ms
+ts_det_pre:   1510.667 ms
+ts_det_infer: 4605.342 ms
+ts_det_post:  392.563 ms
+ts_rec_pre:   64.259 ms
+ts_rec_infer: 912.839 ms
+ts_rec_post:  565.021 ms
 --------------------------------
-ts_avg_pre:   124.531 ms
-ts_avg_infer: 297.553 ms
-ts_avg_post:  88.564 ms
+ts_avg_pre:   82.891 ms
+ts_avg_infer: 290.431 ms
+ts_avg_post:  50.399 ms
 ================================
-Total time:   15732.000 ms
+Total time:   12968.000 ms
 ```
 
 ⚪ ppocrv2_det + chocr_rec
 
 ```shell
-[root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocrv2_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel 
-/dataset/train_full_images_0
+[root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# nice -n -19 ./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocrv2_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0
 version: 1.4.0
-ppocrv2_det Build at 2024-10-30 18:42:03 For platform cv180x
+ppocrv2_det Build at 2024-10-31 18:27:55 For platform cv180x
 Max SharedMem size:8179200
 version: 1.4.0
-chocr_rec Build at 2024-10-30 19:45:05 For platform cv180x
+chocr_rec Build at 2024-10-31 18:05:38 For platform cv180x
 Max SharedMem size:908000
 find shared memory(8179200),  saved:908000 
-ts_model_load: 920.000 ms
+ts_model_load: 812.000 ms
 >> progress: ...................
-ts_model_unload: 100.000 ms
+ts_model_unload: 92.000 ms
 ================================
 n_img:        19
 n_crop:       50
 --------------------------------
-ts_img_load:  3787.367 ms
-ts_img_crop:  349.583 ms
-ts_det_pre:   1610.138 ms
-ts_det_infer: 4276.350 ms
-ts_det_post:  601.726 ms
-ts_rec_pre:   77.552 ms
-ts_rec_infer: 1140.498 ms
-ts_rec_post:  721.855 ms
+ts_img_load:  3550.438 ms
+ts_img_crop:  310.863 ms
+ts_det_pre:   1484.322 ms
+ts_det_infer: 4210.566 ms
+ts_det_post:  316.821 ms
+ts_rec_pre:   75.400 ms
+ts_rec_infer: 1138.814 ms
+ts_rec_post:  706.176 ms
 --------------------------------
-ts_avg_pre:   88.826 ms
-ts_avg_infer: 285.097 ms
-ts_avg_post:  69.662 ms
+ts_avg_pre:   82.091 ms
+ts_avg_infer: 281.546 ms
+ts_avg_post:  53.842 ms
 ================================
-Total time:   13632.000 ms
+Total time:   12808.000 ms
 ```
 
 ⚪ ppocr_mb_det + chocr_rec
 
 ```shell
-[root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocr_mb_det_int8.cvimodel ../cvimodels/chocr_rec_bf16.cvimodel 
-/dataset/train_full_images_0
+[root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# nice -n -19 ./bin/cvi_sample_myocr_sys_many ../cvimodels/ppocr_mb_det_int8.cvimodel ../cvimodels/chocr_rec_bf16.cvimodel /dataset/train_full_images_0
 version: 1.4.0
-ppocr_mb_det Build at 2024-10-30 18:42:34 For platform cv180x
+ppocr_mb_det Build at 2024-10-31 18:14:22 For platform cv180x
 Max SharedMem size:8179200
 version: 1.4.0
-chocr_rec Build at 2024-10-30 19:45:05 For platform cv180x
+chocr_rec Build at 2024-10-31 18:05:38 For platform cv180x
 Max SharedMem size:908000
 find shared memory(8179200),  saved:908000 
-ts_model_load: 828.000 ms
+ts_model_load: 772.000 ms
 >> progress: ...................
-ts_model_unload: 88.000 ms
+ts_model_unload: 92.000 ms
 ================================
 n_img:        19
 n_crop:       41
 --------------------------------
-ts_img_load:  4041.439 ms
-ts_img_crop:  350.884 ms
-ts_det_pre:   1937.523 ms
-ts_det_infer: 4307.407 ms
-ts_det_post:  810.919 ms
-ts_rec_pre:   67.760 ms
-ts_rec_infer: 937.045 ms
-ts_rec_post:  602.651 ms
+ts_img_load:  3833.770 ms
+ts_img_crop:  314.424 ms
+ts_det_pre:   1567.648 ms
+ts_det_infer: 4259.731 ms
+ts_det_post:  428.315 ms
+ts_rec_pre:   64.891 ms
+ts_rec_infer: 934.403 ms
+ts_rec_post:  579.532 ms
 --------------------------------
-ts_avg_pre:   105.541 ms
-ts_avg_infer: 276.024 ms
-ts_avg_post:  74.398 ms
+ts_avg_pre:   85.923 ms
+ts_avg_infer: 273.375 ms
+ts_avg_post:  53.045 ms
 ================================
-Total time:   14080.000 ms
+Total time:   12936.000 ms
 ```
