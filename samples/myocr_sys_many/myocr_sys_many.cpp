@@ -1,11 +1,7 @@
 #include <stdio.h>
-#include <limits.h>
 #include <dirent.h>
-#include <time.h>
-#include <iostream>
-#include <string>
+#include <sys/time.h>
 #include <vector>
-#include <numeric>
 #include <cviruntime.h>
 #include <opencv2/opencv.hpp>
 
@@ -13,6 +9,7 @@ using namespace cv;
 using namespace std;
 
 // my ocr pipeline: ppocr det + chocr rec
+// https://blog.csdn.net/u012351051/article/details/109372643
 
 #pragma region def
 typedef vector<Point> Contour;
@@ -21,13 +18,13 @@ typedef vector<Point> Box;
 #define min(x, y) (((x) <= (y)) ? (x) : (y))
 #define max(x, y) (((x) >= (y)) ? (x) : (y))
 #define clip(x, a, b) min(max((x), (a)), (b))
-#define clock_to_ms(x) (double(x) * 1000 / CLOCKS_PER_SEC)
+#define us_to_ms(x) (double(x) / 1000)
 
 #define DET_IMG_SIZE      640
 #define DET_SEG_THRESH    0.6
 #define DET_BOX_THRESH    0.3
 #define DET_MAX_BOXES     100
-#define DET_MIN_SIZE      3
+#define DET_MIN_SIZE      15
 #define DET_UNCLIP_K      3.0
 #define DET_UNCLIP_T      1.414
 #define DET_QSCALE        127
@@ -40,6 +37,17 @@ typedef vector<Point> Box;
 
 //#define DEBUG_DUMP_IMG
 #pragma endregion def
+
+inline float timeval_to_ms(struct timeval &a, struct timeval &b) {
+  float a_ms = a.tv_sec * 1000 + float(a.tv_usec) / 1000;
+  float b_ms = b.tv_sec * 1000 + float(b.tv_usec) / 1000;
+  return b_ms - a_ms;
+}
+inline time_t timeval_to_us(struct timeval &a, struct timeval &b) {
+  time_t a_ns = a.tv_sec * 1000000 + a.tv_usec;
+  time_t b_ns = b.tv_sec * 1000000 + b.tv_usec;
+  return b_ns - a_ns;
+}
 
 int main(int argc, char *argv[]) {
   #pragma region chk
@@ -58,14 +66,16 @@ int main(int argc, char *argv[]) {
 
   #pragma region stats
   int n_img = 0, n_crop = 0;
-  clock_t ts_init = clock(), ts_start, ts_end;
-  clock_t ts_img_load = 0, ts_img_crop = 0;
-  clock_t ts_det_pre = 0, ts_det_infer = 0, ts_det_post = 0;
-  clock_t ts_rec_pre = 0, ts_rec_infer = 0, ts_rec_post = 0;
+  struct timeval tv_init, tv_start, tv_end;
+  gettimeofday(&tv_init, NULL);
+  // timespan in microsecond (us)
+  time_t ts_det_pre  = 0, ts_det_infer = 0, ts_det_post = 0;
+  time_t ts_img_load = 0, ts_img_crop  = 0;
+  time_t ts_rec_pre  = 0, ts_rec_infer = 0, ts_rec_post = 0;
   #pragma endregion stats
 
   #pragma region load
-  ts_start = clock();
+  gettimeofday(&tv_start, NULL);
 
   CVI_MODEL_HANDLE det_model = nullptr, rec_model = nullptr;
   CVI_RC ret_code;
@@ -89,7 +99,8 @@ int main(int argc, char *argv[]) {
   uint8_t *rec_ptr = (uint8_t *) CVI_NN_TensorPtr(rec_input);
   const size_t L = rec_output->shape.dim[0], D = rec_output->shape.dim[2];
 
-  printf("ts_model_load: %.3f ms\n", clock_to_ms(clock() - ts_start));
+  gettimeofday(&tv_end, NULL);
+  printf("ts_model_load: %.3f ms\n", timeval_to_ms(tv_start, tv_end));
   #pragma endregion load
 
   #pragma region process
@@ -112,13 +123,14 @@ int main(int argc, char *argv[]) {
     strcat(fp, "/");
     strcat(fp, entry->d_name);
     fprintf(fout, "%s\n", entry->d_name);
-    putchar('.');
+    putchar('.'); fflush(stdout);
     n_img++;
 
     #pragma region img
-    ts_start = clock();
+    gettimeofday(&tv_start, NULL);
     im = imread(fp);
-    ts_img_load += clock() - ts_start;
+    gettimeofday(&tv_end, NULL);
+    ts_img_load += timeval_to_us(tv_start, tv_end);
     if (!im.data) {
       printf("Could not open or find the image file: %s\n", fp);
       continue;
@@ -127,7 +139,7 @@ int main(int argc, char *argv[]) {
 
     #pragma region det
     // preprocess (resize)
-    ts_start = clock();
+    gettimeofday(&tv_start, NULL);
     int W = im.cols, H = im.rows;
     int size_max = max(W, H);
     cvs = Mat::zeros(DET_IMG_SIZE, DET_IMG_SIZE, CV_8UC3);
@@ -139,17 +151,19 @@ int main(int argc, char *argv[]) {
     } else {
       im.copyTo(cvs(Rect(0, 0, W, H)));
     }
-    ts_det_pre += clock() - ts_start;
+    gettimeofday(&tv_end, NULL);
+    ts_det_pre += timeval_to_us(tv_start, tv_end);
 
     // infer
-    ts_start = clock();
+    gettimeofday(&tv_start, NULL);
     memcpy(det_ptr, cvs.reshape(1).data, cvs.step[0] * cvs.rows);
     CVI_NN_Forward(det_model, det_inputs, det_input_num, det_outputs, det_output_num);
     int8_t *plogits = (int8_t *) CVI_NN_TensorPtr(det_output);
-    ts_det_infer += clock() - ts_start;
+    gettimeofday(&tv_end, NULL);
+    ts_det_infer += timeval_to_us(tv_start, tv_end);
 
     // postprocess (bitmap -> boxes)
-    ts_start = clock();
+    gettimeofday(&tv_start, NULL);
     bitmap = Mat(DET_IMG_SIZE, DET_IMG_SIZE, CV_8SC1, plogits) >= int8_t(DET_SEG_THRESH * DET_QSCALE);
     contours.clear();
     findContours(bitmap, contours, RETR_LIST, CHAIN_APPROX_SIMPLE);
@@ -178,7 +192,8 @@ int main(int argc, char *argv[]) {
       }
       boxes.emplace_back(box);
     }
-    ts_det_post += clock() - ts_start;
+    gettimeofday(&tv_end, NULL);
+    ts_det_post += timeval_to_us(tv_start, tv_end);
     #pragma endregion det
 
     #pragma region rec
@@ -191,7 +206,7 @@ int main(int argc, char *argv[]) {
       n_crop++;
 
       // crop
-      ts_start = clock();
+      gettimeofday(&tv_start, NULL);
       pts.clear();
       for (auto &p : box) pts.emplace_back(p);
       float img_crop_width  = max(16, max(norm(box[0] - box[1]), norm(box[2] - box[3])));
@@ -206,27 +221,30 @@ int main(int argc, char *argv[]) {
       warpPerspective(im, im_crop, M, Size(img_crop_width, img_crop_height), INTER_CUBIC, BORDER_REPLICATE);
       if (float(im_crop.rows) / im_crop.cols >= 1.5)
         rotate(im_crop, im_crop, ROTATE_90_COUNTERCLOCKWISE);
-      ts_img_crop += clock() - ts_start;
+      gettimeofday(&tv_end, NULL);
+      ts_img_crop += timeval_to_us(tv_start, tv_end);
 
       // preprocess
-      ts_start = clock();
+      gettimeofday(&tv_start, NULL);
       int W = im_crop.cols, H = im_crop.rows;
       int W_resize = min(W * REC_IMG_HEIGHT / H, REC_IMG_WIDTH);
       if (W != W_resize || H != REC_IMG_HEIGHT)
         resize(im_crop, im_crop, Size(W_resize, REC_IMG_HEIGHT));
       cvs = Mat(REC_IMG_HEIGHT, REC_IMG_WIDTH, CV_8UC3, Scalar::all(255));
       im_crop.copyTo(cvs(Rect(0, 0, W_resize, REC_IMG_HEIGHT)));
-      ts_rec_pre += clock() - ts_start;
+      gettimeofday(&tv_end, NULL);
+      ts_rec_pre += timeval_to_us(tv_start, tv_end);
 
       // infer
-      ts_start = clock();
+      gettimeofday(&tv_start, NULL);
       memcpy(rec_ptr, cvs.reshape(1).data, cvs.step[0] * cvs.rows);
       CVI_NN_Forward(rec_model, rec_inputs, rec_input_num, rec_outputs, rec_output_num);
       float_t *logits = (float_t *) CVI_NN_TensorPtr(rec_output);
-      ts_rec_infer += clock() - ts_start;
+      gettimeofday(&tv_end, NULL);
+      ts_rec_infer += timeval_to_us(tv_start, tv_end);
 
       // postprocess & write
-      ts_start = clock();
+      gettimeofday(&tv_start, NULL);
       int last_idx = -1;
       for (int k = 0 ; k < L; k++) {
         float_t *logdist = &logits[k * D];
@@ -246,7 +264,8 @@ int main(int argc, char *argv[]) {
         }
       }
       fputc('\n', fout);
-      ts_rec_post += clock() - ts_start;
+      gettimeofday(&tv_end, NULL);
+      ts_rec_post += timeval_to_us(tv_start, tv_end);
     }
     #pragma endregion rec
 
@@ -260,11 +279,11 @@ int main(int argc, char *argv[]) {
   #pragma endregion process
 
   #pragma region unload
-  ts_start = clock();
+  gettimeofday(&tv_start, NULL);
   CVI_NN_CleanupModel(det_model);
   CVI_NN_CleanupModel(rec_model);
-  ts_end = clock();
-  printf("ts_model_unload: %.3f ms\n", clock_to_ms(ts_end - ts_start));
+  gettimeofday(&tv_end, NULL);
+  printf("ts_model_unload: %.3f ms\n", timeval_to_ms(tv_start, tv_end));
   #pragma endregion unload
 
   #pragma region perfcnt
@@ -272,19 +291,19 @@ int main(int argc, char *argv[]) {
   printf("n_img:        %d\n", n_img);
   printf("n_crop:       %d\n", n_crop);
   puts("--------------------------------");
-  printf("ts_img_load:  %.3f ms\n", clock_to_ms(ts_img_load));
-  printf("ts_img_crop:  %.3f ms\n", clock_to_ms(ts_img_crop));
-  printf("ts_det_pre:   %.3f ms\n", clock_to_ms(ts_det_pre));
-  printf("ts_det_infer: %.3f ms\n", clock_to_ms(ts_det_infer));
-  printf("ts_det_post:  %.3f ms\n", clock_to_ms(ts_det_post));
-  printf("ts_rec_pre:   %.3f ms\n", clock_to_ms(ts_rec_pre));
-  printf("ts_rec_infer: %.3f ms\n", clock_to_ms(ts_rec_infer));
-  printf("ts_rec_post:  %.3f ms\n", clock_to_ms(ts_rec_post));
+  printf("ts_img_load:  %.3f ms\n", us_to_ms(ts_img_load));
+  printf("ts_img_crop:  %.3f ms\n", us_to_ms(ts_img_crop));
+  printf("ts_det_pre:   %.3f ms\n", us_to_ms(ts_det_pre));
+  printf("ts_det_infer: %.3f ms\n", us_to_ms(ts_det_infer));
+  printf("ts_det_post:  %.3f ms\n", us_to_ms(ts_det_post));
+  printf("ts_rec_pre:   %.3f ms\n", us_to_ms(ts_rec_pre));
+  printf("ts_rec_infer: %.3f ms\n", us_to_ms(ts_rec_infer));
+  printf("ts_rec_post:  %.3f ms\n", us_to_ms(ts_rec_post));
   puts("--------------------------------");
-  printf("ts_avg_pre:   %.3f ms\n", clock_to_ms(ts_det_pre   + ts_rec_pre)   / n_img);
-  printf("ts_avg_infer: %.3f ms\n", clock_to_ms(ts_det_infer + ts_rec_infer) / n_img);
-  printf("ts_avg_post:  %.3f ms\n", clock_to_ms(ts_det_post  + ts_rec_post)  / n_img);
+  printf("ts_avg_pre:   %.3f ms\n", us_to_ms(ts_det_pre   + ts_rec_pre  ) / n_img);
+  printf("ts_avg_infer: %.3f ms\n", us_to_ms(ts_det_infer + ts_rec_infer) / n_img);
+  printf("ts_avg_post:  %.3f ms\n", us_to_ms(ts_det_post  + ts_rec_post ) / n_img);
   puts("================================");
-  printf("Total time:   %.3f ms\n", clock_to_ms(ts_end - ts_init));
+  printf("Total time:   %.3f ms\n", timeval_to_ms(tv_init, tv_end));
   #pragma endregion perfcnt
 }
