@@ -11,11 +11,8 @@
 using namespace cv;
 using namespace std;
 
-// ppocr basic pipeline: det + rec (no cls)
-// https://github.com/sophgo/cviruntime/blob/master/doc/cvitek_tpu_sdk_development_manual.md
-// https://docs.opencv.org/4.x/
-// https://stackoverflow.com/questions/8267191/how-to-crop-a-cvmat-in-opencv
-// https://stackoverflow.com/questions/26441072/finding-the-size-in-bytes-of-cvmat
+// ppocr pipeline: det + rec
+// TODO: do NOT use clock() for timer!!
 
 #pragma region def
 typedef vector<Point> Contour;
@@ -33,11 +30,10 @@ typedef vector<Point> Box;
 #define DET_UNCLIP_K      3.0
 #define DET_UNCLIP_T      1.414
 #define DET_QSCALE        127
-#define REC_IMG_WIDTH     640
-#define REC_IMG_HEIGHT    48
+#define REC_IMG_WIDTH     320
+#define REC_IMG_HEIGHT    32
 #define REC_LOGIT_NINF    -114514191981.0
 
-//#define DEBUG_MODEL_INFO
 //#define DEBUG_DUMP_IMG
 #pragma endregion def
 
@@ -86,18 +82,6 @@ int main(int argc, char *argv[]) {
   output = CVI_NN_GetTensorByName(CVI_NN_DEFAULT_TENSOR, outputs, output_num);
   ptr = (uint8_t *) CVI_NN_TensorPtr(input);      // (1, 3, 640, 640), uint8
 
-#ifdef DEBUG_MODEL_INFO
-  printf("[det model info]\n");
-  printf("  input->fmt: %d\n", input->fmt);       // CVI_FMT_UINT8=7
-  printf("  input->count: %d\n", input->count);   // 1228800
-  printf("  input->shape: %d (%d, %d, %d, %d)\n", input->shape.dim_size, input->shape.dim[0], input->shape.dim[1], input->shape.dim[2], input->shape.dim[3]); // 4 (1, 640, 640, 3)
-  printf("  input->pixel_format: %d\n", input->pixel_format);   // CVI_NN_PIXEL_BGR_PACKED=1
-  printf("  output->fmt: %d\n", output->fmt);     // CVI_FMT_INT8=6
-  printf("  output->count: %d\n", output->count); // 409600
-  printf("  output->shape: %d (%d, %d, %d, %d)\n", output->shape.dim_size, output->shape.dim[0], output->shape.dim[1], output->shape.dim[2], output->shape.dim[3]); // 4 (1, 1, 640, 640)
-  printf("  output->pixel_format: %d\n", output->pixel_format); // CVI_NN_PIXEL_TENSOR=100
-#endif
-
   // preprocess (resize)
   ts_start = clock();
   int W = im.cols, H = im.rows;
@@ -118,7 +102,7 @@ int main(int argc, char *argv[]) {
   ts_start = clock();
   memcpy(ptr, cvs.reshape(1).data, cvs.step[0] * cvs.rows);
   CVI_NN_Forward(model, inputs, input_num, outputs, output_num);
-  int8_t *plogits = (int8_t *) CVI_NN_TensorPtr(output);  // (1, 1, 640, 640), int8
+  int8_t *plogits = (int8_t *) CVI_NN_TensorPtr(output);
   printf("ts_det_infer: %d clock\n", clock() - ts_start);
 
   // postprocess (bitmap -> boxes)
@@ -178,20 +162,8 @@ int main(int argc, char *argv[]) {
   CVI_NN_GetInputOutputTensors(model, &inputs, &input_num, &outputs, &output_num);
   input  = CVI_NN_GetTensorByName(CVI_NN_DEFAULT_TENSOR, inputs,  input_num );
   output = CVI_NN_GetTensorByName(CVI_NN_DEFAULT_TENSOR, outputs, output_num);
-  ptr = (uint8_t *) CVI_NN_TensorPtr(input);        // (1, 1, 48, 640), uint8
-  const size_t L = output->shape.dim[1], D = output->shape.dim[2];  // 160, 6625
-
-#ifdef DEBUG_MODEL_INFO
-  printf("[rec model info]\n");
-  printf("  input->fmt: %d\n", input->fmt);       // CVI_FMT_UINT8=7
-  printf("  input->count: %d\n", input->count);   // 92160
-  printf("  input->shape: %d (%d, %d, %d, %d)\n", input->shape.dim_size, input->shape.dim[0], input->shape.dim[1], input->shape.dim[2], input->shape.dim[3]); // 4 (1, 48, 640, 3)
-  printf("  input->pixel_format: %d\n", input->pixel_format);   // CVI_NN_PIXEL_BGR_PACKED=1
-  printf("  output->fmt: %d\n", output->fmt);     // CVI_FMT_FP32=0
-  printf("  output->count: %d\n", output->count); // 1060000
-  printf("  output->shape: %d (%d, %d, %d, %d)\n", output->shape.dim_size, output->shape.dim[0], output->shape.dim[1], output->shape.dim[2], output->shape.dim[3]); // 4 (1, 160, 6625, 1)
-  printf("  output->pixel_format: %d\n", output->pixel_format); // CVI_NN_PIXEL_TENSOR=100
-#endif
+  ptr = (uint8_t *) CVI_NN_TensorPtr(input);
+  const size_t L = output->shape.dim[1], D = output->shape.dim[2];
 
   for (int b = 0 ; b < boxes.size() ; b++) {
     Box &box = boxes[b];
@@ -219,17 +191,13 @@ int main(int argc, char *argv[]) {
     sprintf(filename, "crop_box-%d.png", b);
     imwrite(filename, im_crop);
 #endif
-    if (true) {
-      // just resize, since padding this input will cause wrong predict??!
-      resize(im_crop, cvs, Size(REC_IMG_WIDTH, REC_IMG_HEIGHT));
-    } else {
-      W = im_crop.cols; H = im_crop.rows;       // fix H to 48
-      int W_resize = W * REC_IMG_HEIGHT / H;
-      if (W != W_resize || H != REC_IMG_HEIGHT)
-        resize(im_crop, im_crop, Size(W_resize, REC_IMG_HEIGHT));
-      cvs = Mat::zeros(REC_IMG_HEIGHT, REC_IMG_WIDTH, CV_8UC3);
-      im_crop.copyTo(cvs(Rect(0, 0, W_resize, REC_IMG_HEIGHT)));
-    }
+
+    int W = im_crop.cols, H = im_crop.rows;
+    int W_resize = min(W * REC_IMG_HEIGHT / H, REC_IMG_WIDTH);
+    if (W != W_resize || H != REC_IMG_HEIGHT)
+      resize(im_crop, im_crop, Size(W_resize, REC_IMG_HEIGHT));
+    Mat cvs(REC_IMG_HEIGHT, REC_IMG_WIDTH, CV_8UC3, Scalar::all(255));
+    im_crop.copyTo(cvs(Rect(0, 0, W_resize, REC_IMG_HEIGHT)));
     ts_rec_pre += clock() - ts_start;
 
 #ifdef DEBUG_DUMP_IMG
@@ -241,7 +209,7 @@ int main(int argc, char *argv[]) {
     ts_start = clock();
     memcpy(ptr, cvs.reshape(1).data, cvs.step[0] * cvs.rows);
     CVI_NN_Forward(model, inputs, input_num, outputs, output_num);
-    float_t *logits = (float_t *) CVI_NN_TensorPtr(output);  // (1, 160, 6625, 1), fp32
+    float_t *logits = (float_t *) CVI_NN_TensorPtr(output);
     ts_rec_infer += clock() - ts_start;
 
     // postprocess

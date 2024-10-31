@@ -10,14 +10,14 @@ To compiler a cvimodel runner, use my handy script:
 
 ```shell
 # this will compile & auto upload to your chip :)
-bash ./compile_sample_runner.sh myocr_sys
+bash ./compile_sample_runner.sh ppocr_sys
 ```
 
 or run step by step, for example:
 
 ```shell
 # compile an ocr TPU app
-pushd samples/myocr_sys
+pushd samples/ppocr_sys
 mkdir -p build ; cd build
 cmake .. \
   -DCMAKE_TOOLCHAIN_FILE=../../cmake/toolchain-riscv64-linux-musl-x86_64.cmake \
@@ -26,7 +26,7 @@ cmake .. \
   -DCMAKE_INSTALL_PREFIX=$TPU_SDK_PATH/samples
 make
 make install
-file $TPU_SDK_PATH/samples/bin/cvi_sample_myocr_sys
+file $TPU_SDK_PATH/samples/bin/cvi_sample_ppocr_sys
 popd
 
 # upload the entir tpu-sdk-cv180x-ocr to chip
@@ -36,7 +36,7 @@ scp -r /workspace/tpu-sdk-cv180x-ocr root@192.168.42.1:/root
 cd tpu-sdk-cv180x-ocr
 source ./envs_tpu_sdk.sh
 cd samples
-./bin/cvi_sample_myocr_sys ../cvimodels/ppocrv4_det_int8.cvimodel  ../cvimodels/chocr_rec_bf16.cvimodel ./data/gt_97.jpg
+./bin/cvi_sample_ppocr_sys ../cvimodels/ppocrv4_det_int8.cvimodel  ../cvimodels/ppocr_mb_rec_bf16.cvimodel ./data/gt_97.jpg
 ```
 
 #### references
