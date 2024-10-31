@@ -1,6 +1,9 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include <dirent.h>
 #include <sys/time.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <vector>
 #include <cviruntime.h>
 #include <opencv2/opencv.hpp>
@@ -22,10 +25,9 @@ typedef vector<Point> Box;
 
 #define DET_IMG_SIZE      640
 #define DET_SEG_THRESH    0.6
-#define DET_BOX_THRESH    0.3
-#define DET_MAX_BOXES     100
-#define DET_MIN_SIZE      15
-#define DET_UNCLIP_K      3.0
+#define DET_MAX_BOXES     10
+#define DET_MIN_SIZE      7
+#define DET_UNCLIP_K      2.7
 #define DET_UNCLIP_T      1.414
 #define DET_QSCALE        127
 #define REC_IMG_WIDTH     320
@@ -33,9 +35,11 @@ typedef vector<Point> Box;
 #define REC_LOGIT_NINF    -114514191981.0
 
 #define SAVE_FILE_PATH    "results.txt"
+#define SAVE_DIR_PATH     "results"
 #define FILE_PATH_MAXLEN  256
 
-//#define DEBUG_DUMP_IMG
+//#define DEBUG_DUMP_DET
+//#define DEBUG_DUMP_REC
 #pragma endregion def
 
 inline float timeval_to_ms(struct timeval &a, struct timeval &b) {
@@ -47,6 +51,10 @@ inline time_t timeval_to_us(struct timeval &a, struct timeval &b) {
   time_t a_ns = a.tv_sec * 1000000 + a.tv_usec;
   time_t b_ns = b.tv_sec * 1000000 + b.tv_usec;
   return b_ns - a_ns;
+}
+int point_cmp(const void *a, const void *b) {
+  Point2f *pa = (Point2f *) a, *pb = (Point2f *) b;
+  return pa->x != pb->x ? pa->x - pb->x : pa->y - pb->y;
 }
 
 int main(int argc, char *argv[]) {
@@ -62,6 +70,12 @@ int main(int argc, char *argv[]) {
     printf("Can not opendir() %s\n", base_path);
     exit(3);
   }
+
+#if defined(DEBUG_DUMP_DET) || defined(DEBUG_DUMP_REC)
+  char dump_fp[FILE_PATH_MAXLEN];
+  if (!opendir(SAVE_DIR_PATH))
+    mkdir(SAVE_DIR_PATH, 0755);
+#endif
   #pragma endregion chk
 
   #pragma region stats
@@ -143,9 +157,10 @@ int main(int argc, char *argv[]) {
     int W = im.cols, H = im.rows;
     int size_max = max(W, H);
     cvs = Mat::zeros(DET_IMG_SIZE, DET_IMG_SIZE, CV_8UC3);
-    if (DET_IMG_SIZE < size_max) {
-      int W_resize = W * DET_IMG_SIZE / size_max, 
-          H_resize = H * DET_IMG_SIZE / size_max;
+    double det_r = double(size_max) / DET_IMG_SIZE;
+    if (size_max > DET_IMG_SIZE) {
+      int W_resize = W / det_r, 
+          H_resize = H / det_r;
       resize(im, im, Size(W_resize, H_resize));   // inplace!
       im.copyTo(cvs(Rect(0, 0, W_resize, H_resize)));
     } else {
@@ -165,6 +180,12 @@ int main(int argc, char *argv[]) {
     // postprocess (bitmap -> boxes)
     gettimeofday(&tv_start, NULL);
     bitmap = Mat(DET_IMG_SIZE, DET_IMG_SIZE, CV_8SC1, plogits) >= int8_t(DET_SEG_THRESH * DET_QSCALE);
+
+#ifdef DEBUG_DUMP_DET
+    sprintf(dump_fp, "%s/bitmap-%d.png\0", SAVE_DIR_PATH, n_img);
+    imwrite(dump_fp, bitmap);
+#endif
+
     contours.clear();
     findContours(bitmap, contours, RETR_LIST, CHAIN_APPROX_SIMPLE);
     int n_contours = min(contours.size(), DET_MAX_BOXES);
@@ -172,11 +193,19 @@ int main(int argc, char *argv[]) {
     for (int i = 0 ; i < n_contours ; i++) {
       auto contour = contours[i];
       if (contour.size() < 4) continue;
+      // contour to rect box
       RotatedRect bbox = minAreaRect(contour);
       int w = bbox.size.width, h = bbox.size.height;
       if (min(w, h) < DET_MIN_SIZE) continue;
-      Point2f tmp[4]; bbox.points(tmp);
-      Box box = { tmp[0], tmp[1], tmp[2], tmp[3] };
+      Point2f tmp[4]; bbox.points(tmp); // native order: bottomLeft, topLeft, topRight, bottomRight, but not stable
+      // sorted order: top-left, top-right, bottom-right, bottom-left
+      qsort(tmp, 4, sizeof(Point2f), point_cmp);
+      int idx_0 = 0, idx_1 = 1, idx_2 = 2, idx_3 = 3;
+      if (tmp[1].y > tmp[0].y) { idx_0 = 0; idx_3 = 1; }
+      else                     { idx_0 = 1; idx_3 = 0; }
+      if (tmp[3].y > tmp[2].y) { idx_1 = 2; idx_2 = 3; }
+      else                     { idx_1 = 3; idx_2 = 2; }
+      Box box = { tmp[idx_0], tmp[idx_1], tmp[idx_2], tmp[idx_3] };
       // box unclip (this is our magic :)
       double w_h = w + h, wh = w * h;
       double t = (sqrt(w_h * w_h + 4 * (DET_UNCLIP_K - 1) * wh) - w_h) / 4 * DET_UNCLIP_T;
@@ -198,11 +227,7 @@ int main(int argc, char *argv[]) {
 
     #pragma region rec
     for (int b = 0 ; b < boxes.size() ; b++) {
-      // write
       Box &box = boxes[b];
-      for (auto &p : box)
-        fprintf(fout, "%d %d ", p.x, p.y);
-      fputc('|', fout);
       n_crop++;
 
       // crop
@@ -224,11 +249,16 @@ int main(int argc, char *argv[]) {
       gettimeofday(&tv_end, NULL);
       ts_img_crop += timeval_to_us(tv_start, tv_end);
 
+#ifdef DEBUG_DUMP_REC
+      sprintf(dump_fp, "%s/crop-%d.png\0", SAVE_DIR_PATH, n_crop);
+      imwrite(dump_fp, im_crop);
+#endif
+
       // preprocess
       gettimeofday(&tv_start, NULL);
-      int W = im_crop.cols, H = im_crop.rows;
-      int W_resize = min(W * REC_IMG_HEIGHT / H, REC_IMG_WIDTH);
-      if (W != W_resize || H != REC_IMG_HEIGHT)
+      int W_crop = im_crop.cols, H_crop = im_crop.rows;
+      int W_resize = min(W_crop * REC_IMG_HEIGHT / H_crop, REC_IMG_WIDTH);
+      if (W_crop != W_resize || H_crop != REC_IMG_HEIGHT)
         resize(im_crop, im_crop, Size(W_resize, REC_IMG_HEIGHT));
       cvs = Mat(REC_IMG_HEIGHT, REC_IMG_WIDTH, CV_8UC3, Scalar::all(255));
       im_crop.copyTo(cvs(Rect(0, 0, W_resize, REC_IMG_HEIGHT)));
@@ -242,6 +272,17 @@ int main(int argc, char *argv[]) {
       float_t *logits = (float_t *) CVI_NN_TensorPtr(rec_output);
       gettimeofday(&tv_end, NULL);
       ts_rec_infer += timeval_to_us(tv_start, tv_end);
+
+      // box rescale back & write (NOTE: `box` is not used after this)
+      if (size_max > DET_IMG_SIZE) {
+        for (auto &p : box) {
+          p.x *= det_r;
+          p.y *= det_r;
+        }
+      }
+      for (auto &p : box)
+        fprintf(fout, "%d %d ", p.x, p.y);
+      fputc('|', fout);
 
       // postprocess & write
       gettimeofday(&tv_start, NULL);

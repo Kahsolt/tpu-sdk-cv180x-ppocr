@@ -34,8 +34,8 @@ def handle_seg():
     box = [max(int(e), 0) for e in box.strip().split(' ')]
     ids = [int(e) for e in ids.strip().split(' ')]
     annots.append({
-      'points': list(zip(box[::2], box[1::2])),
       'transcription': ''.join([vocab[e] for e in ids]),
+      'points': list(zip(box[::2], box[1::2])),
     })
   seg.clear()
 
@@ -46,7 +46,8 @@ for line in lines:
     seg.append(line)
 if seg: handle_seg()
 
-print('>> save results to results.json')
+fn_out = Path(fn).with_suffix('.json')
+print(f'>> save results to {fn_out}')
 print('>> len(results):', len(results))
-with open('results.json', 'w', encoding='utf-8') as fh:
+with open(fn_out, 'w', encoding='utf-8') as fh:
   json.dump(results, fh, indent=2, ensure_ascii=False)
