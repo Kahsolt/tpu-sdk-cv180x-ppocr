@@ -17,8 +17,8 @@ using namespace std;
 #pragma region def
 #define min(x, y) (((x) <= (y)) ? (x) : (y))
 
-#define REC_IMG_HEIGHT   48
-#define REC_IMG_WIDTH    640
+#define REC_IMG_HEIGHT   32
+#define REC_IMG_WIDTH    320
 #define REC_LOGIT_NINF   -114514191981.0
 
 //#define SHOW_MODEL_INFO
@@ -53,12 +53,12 @@ int main(int argc, char *argv[]) {
 #ifdef SHOW_MODEL_INFO
   printf("[Model Info]\n");
   printf("  input->fmt: %d\n", input->fmt);       // CVI_FMT_UINT8=7
-  printf("  input->count: %d\n", input->count);   // 92160
-  printf("  input->shape: %d (%d, %d, %d, %d)\n", input->shape.dim_size, input->shape.dim[0], input->shape.dim[1], input->shape.dim[2], input->shape.dim[3]); // 4 (1, 48, 640, 3)
+  printf("  input->count: %d\n", input->count);   // 30720
+  printf("  input->shape: %d (%d, %d, %d, %d)\n", input->shape.dim_size, input->shape.dim[0], input->shape.dim[1], input->shape.dim[2], input->shape.dim[3]); // 4 (1, 32, 320, 3)
   printf("  input->pixel_format: %d\n", input->pixel_format);   // CVI_NN_PIXEL_BGR_PACKED=1
   printf("  output->fmt: %d\n", output->fmt);     // CVI_FMT_FP32=0
-  printf("  output->count: %d\n", output->count); // 1060000
-  printf("  output->shape: %d (%d, %d, %d, %d)\n", output->shape.dim_size, output->shape.dim[0], output->shape.dim[1], output->shape.dim[2], output->shape.dim[3]); // 4 (1, 160, 6625, 1)
+  printf("  output->count: %d\n", output->count); // 530000
+  printf("  output->shape: %d (%d, %d, %d, %d)\n", output->shape.dim_size, output->shape.dim[0], output->shape.dim[1], output->shape.dim[2], output->shape.dim[3]); // 4 (1, 80, 6625, 1)
   printf("  output->pixel_format: %d\n", output->pixel_format); // CVI_NN_PIXEL_TENSOR=100
 #endif
 
@@ -86,16 +86,12 @@ int main(int argc, char *argv[]) {
 
   // preprocess (resize)
   ts_start = clock();
-  Mat cvs;
-  resize(im, cvs, Size(REC_IMG_WIDTH, REC_IMG_HEIGHT));
-  /* Note: cannot right pad this model, do not know why...
   int W = im.cols, H = im.rows;
   int W_resize = min(W * REC_IMG_HEIGHT / H, REC_IMG_WIDTH);
   if (W != W_resize || H != REC_IMG_HEIGHT)
     resize(im, im, Size(W_resize, REC_IMG_HEIGHT));
   Mat cvs = Mat(REC_IMG_HEIGHT, REC_IMG_WIDTH, CV_8UC3, Scalar::all(255));
   im.copyTo(cvs(Rect(0, 0, W_resize, REC_IMG_HEIGHT)));
-  */
   printf("preprocess: %d clock\n", clock() - ts_start);
 
   // write to input tensor (uint8)
@@ -110,7 +106,7 @@ int main(int argc, char *argv[]) {
   printf("model forward: %d clock\n", clock() - ts_start);
 
   // read from output tensor (float32)
-  float_t *logits = (float_t *) CVI_NN_TensorPtr(output);   // [B=1, L=160, D=6625, X=1]
+  float_t *logits = (float_t *) CVI_NN_TensorPtr(output);   // [B=1, L=80, D=6625, X=1]
 
   // post-process: argmax()
   ts_start = clock();

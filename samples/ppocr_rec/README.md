@@ -1,19 +1,17 @@
 # PPOCR rec-model with fuse proprocess and quant to bf16
 
-⚠ 精度很烂，会不会是 L 维度太长导致误差累计崩溃？
-
 ⚪ support models (BF16)
 
 ```
 input.dtype:  uint8
-input.shape:  (1, 48, 640, 3)   // nhwc, BGR
+input.shape:  (1, 32, 320, 3)   // nhwc, BGR
 output.dtype: fp32              // logits
-output.shape: (1, 160, 6625, 1) // nldx
+output.shape: (1, 80, 6625, 1) // nldx
 ```
 
 | model | runnable? | quality |
 | :-: | :-: | :-: |
-| ppocr_mb_rec_bf16 | √ | just so so, wired input fmt??! |
+| ppocr_mb_rec_bf16 | √ | good! |
 
 ⚪ build & run
 
@@ -32,80 +30,92 @@ cd samples
 
 # run on chip: decode output with python
 python -c "print(b''.decode())"
-python -c "print(b'\x4d\x79\xe8\xba\xab\xe8\x88\xaa\xe4\xbb\xb7\xe5\x84\xbf\xe5\x94\xae\xe6\xb4\xbb\xe9\xa6\x86'.decode())"   # "My身航价儿售活馆"
-python -c "print(b'\x79\x6e'.decode())"                                                                                       # "yn"
-python -c "print(b'\x30\x38\x30\x38\x31\x38\x32\x2e\x30'.decode())"                                                           # "0808182.0"
-python -c "print(b'\xe8\x81\x98\xe7\xbb\xb4\x32\x67\xe6\x8a\x98'.decode())"                                                   # "聘维2g折"
+python -c "print(b'\xe5\xbc\x80\xe5\xbf\x83\xe6\x9c\x80\xe6\x84\x8f\xe5\xa9\xb4\xe5\xb9\xbc\xe5\x84\xbf\xe7\x94\x9f\xe6\xb4\xbb\xe9\xa6\x86'.decode())"               # 开心最意婴幼儿生活馆
+python -c "print(b'\xe5\x8e\x9f\xe5\xae\xb6\xe7\xae\xa1\xe9\xa5\xae\xe8\xbf\x9e\xe9\x94\x81'.decode())"                                                               # 原家管饮连锁
+python -c "print(b'\xe6\x95\xac\xe6\x88\xbf\xe9\x97\xb4\xe6\x83\x85\xe8\xb5\x84\xe5\xa5\x87\xe8\xae\xb0\xe6\x9c\x8d\xe5\x8a\xa1\xe4\xb8\xad\xe5\xbf\x83'.decode())"   # 敬房间情资奇记服务中心
+python -c "print(b'\xe5\x85\x89\xe8\xbe\x89\xe9\x87\x8c\xe6\xb7\xae\xe7\x89\xa9\xe4\xb8\x9a\xe5\xb0\x8f\xe5\x8c\xba'.decode())"                                       # 光辉里淮物业小区
 ```
 
 ⚪ ppocr_mb_rec
 
 ```
 [root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_ppocr_rec ../cvimodels/ppocr_mb_rec_bf16.cvimodel ./data/crop_9.jpg   ./data/ppocr_keys_v1.txt
-load model: 179153 clock
+version: 1.4.0
+ppocr_mb_rec Build at 2024-10-31 19:56:20 For platform cv180x
+Max SharedMem size:1075360
+load model: 74850 clock
 imgs.shape: w=238, h=30
-load image: 12375 clock
-load word dict: 16313 clock
-preprocess: 10335 clock
-feed input: 340 clock
-model forward: 615 clock
+load image: 7833 clock
+load word dict: 19097 clock
+preprocess: 4868 clock
+feed input: 87 clock
+model forward: 584 clock
 ------
-3639 4546 1350 87 1029 513 2587 473 2504 
-\x4d\x79\xe8\xba\xab\xe8\x88\xaa\xe4\xbb\xb7\xe5\x84\xbf\xe5\x94\xae\xe6\xb4\xbb\xe9\xa6\x86
+182 78 1070 784 1435 4790 513 687 473 2504 
+\xe5\xbc\x80\xe5\xbf\x83\xe6\x9c\x80\xe6\x84\x8f\xe5\xa9\xb4\xe5\xb9\xbc\xe5\x84\xbf\xe7\x94\x9f\xe6\xb4\xbb\xe9\xa6\x86
 ------
-postprocess: 68046 clock
-unload model: 4729 clock
-Total time cost: 301098
+postprocess: 35165 clock
+unload model: 4281 clock
+Total time cost: 153627
 CLOCKS_PER_SEC: 1000000
 
 [root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_ppocr_rec ../cvimodels/ppocr_mb_rec_bf16.cvimodel ./data/crop_177.jpg ./data/ppocr_keys_v1.txt
-load model: 159816 clock
+version: 1.4.0
+ppocr_mb_rec Build at 2024-10-31 19:56:20 For platform cv180x
+Max SharedMem size:1075360
+load model: 76737 clock
 imgs.shape: w=255, h=57
-load image: 14205 clock
-load word dict: 15972 clock
-preprocess: 11902 clock
-feed input: 200 clock
-model forward: 1401 clock
+load image: 12194 clock
+load word dict: 18726 clock
+preprocess: 7152 clock
+feed input: 88 clock
+model forward: 510 clock
 ------
-4546 4547 
-\x79\x6e
+23 1516 541 4430 2201 3264 
+\xe5\x8e\x9f\xe5\xae\xb6\xe7\xae\xa1\xe9\xa5\xae\xe8\xbf\x9e\xe9\x94\x81
 ------
-postprocess: 67882 clock
-unload model: 4813 clock
-Total time cost: 285731
+postprocess: 34658 clock
+unload model: 4340 clock
+Total time cost: 161734
 CLOCKS_PER_SEC: 1000000
 
 [root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_ppocr_rec ../cvimodels/ppocr_mb_rec_bf16.cvimodel ./data/crop_1.jpg   ./data/ppocr_keys_v1.txt
-load model: 168782 clock
+version: 1.4.0
+ppocr_mb_rec Build at 2024-10-31 19:56:20 For platform cv180x
+Max SharedMem size:1075360
+load model: 76798 clock
 imgs.shape: w=618, h=67
-load image: 20470 clock
-load word dict: 16194 clock
-preprocess: 11683 clock
-feed input: 483 clock
-model forward: 530 clock
+load image: 18767 clock
+load word dict: 16793 clock
+preprocess: 9398 clock
+feed input: 185 clock
+model forward: 518 clock
 ------
-26 27 26 27 93 27 25 466 26 
-\x30\x38\x30\x38\x31\x38\x32\x2e\x30
+5243 22 201 521 51 799 707 310 525 194 78 
+\xe6\x95\xac\xe6\x88\xbf\xe9\x97\xb4\xe6\x83\x85\xe8\xb5\x84\xe5\xa5\x87\xe8\xae\xb0\xe6\x9c\x8d\xe5\x8a\xa1\xe4\xb8\xad\xe5\xbf\x83
 ------
-postprocess: 68302 clock
-unload model: 4576 clock
-Total time cost: 300539
+postprocess: 34917 clock
+unload model: 4382 clock
+Total time cost: 168866
 CLOCKS_PER_SEC: 1000000
 
 [root@milkv-duo]~/tpu-sdk-cv180x-ocr/samples# ./bin/cvi_sample_ppocr_rec ../cvimodels/ppocr_mb_rec_bf16.cvimodel ./data/crop_58.jpg  ./data/ppocr_keys_v1.txt
-load model: 164678 clock
+version: 1.4.0
+ppocr_mb_rec Build at 2024-10-31 19:56:20 For platform cv180x
+Max SharedMem size:1075360
+load model: 80842 clock
 imgs.shape: w=260, h=42
-load image: 13189 clock
-load word dict: 15534 clock
-preprocess: 10532 clock
-feed input: 340 clock
-model forward: 526 clock
+load image: 10516 clock
+load word dict: 17113 clock
+preprocess: 6364 clock
+feed input: 87 clock
+model forward: 375 clock
 ------
-1709 1373 25 4548 963 
-\xe8\x81\x98\xe7\xbb\xb4\x32\x67\xe6\x8a\x98
+722 3296 86 3586 1449 85 313 492 
+\xe5\x85\x89\xe8\xbe\x89\xe9\x87\x8c\xe6\xb7\xae\xe7\x89\xa9\xe4\xb8\x9a\xe5\xb0\x8f\xe5\x8c\xba
 ------
-postprocess: 68510 clock
-unload model: 4702 clock
-Total time cost: 286733
+postprocess: 34778 clock
+unload model: 4274 clock
+Total time cost: 161840
 CLOCKS_PER_SEC: 1000000
 ```

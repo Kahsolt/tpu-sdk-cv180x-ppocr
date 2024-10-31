@@ -1,13 +1,13 @@
 Mlir Version: v1.3.228-g19ca95e9-20230921
 Cvimodel Version: 1.4.0
-ppocr_mb_rec Build at 2024-10-31 18:08:03
+ppocr_mb_rec Build at 2024-10-31 19:56:20
 For cv180x chip ONLY
-CviModel Need ION Memory Size: (14.71 MB)
+CviModel Need ION Memory Size: (7.93 MB)
 
 Sections:
 ID   TYPE      NAME                     SIZE        OFFSET      MD5
-000  weight    weight                   2190064     0           9aaf2b896299a5d2ce5caaf54c0763af
-001  cmdbuf    subfunc_0                6749544     2190064     624a23b6a6ffde678bf18563e5c7f218
+000  weight    weight                   2190064     0           f431550c5d2a24f9166e42d4b0bde640
+001  cmdbuf    subfunc_0                2897376     2190064     f516c812bbecad30b90cf31c2f14701d
 
 WeightMap:
 ID   OFFSET    SIZE      TYPE    N    C    H    W    NAME
@@ -197,7 +197,7 @@ ID   OFFSET    SIZE      TYPE    N    C    H    W    NAME
 Program #0
     batch_num   : 0
     private_gmem_size: 0
-    shared_gmem_size: 2150720
+    shared_gmem_size: 1075360
     inputs      : x_raw
     outputs     : p2o.Add.51_Add_f32
     routines    :
@@ -208,148 +208,142 @@ Program #0
 
     tensor_map  :
         ID   OFFSET      TYPE  N    C    H    W    QSCALE     MEM     NAME
-        000  0           uint8 1    48   640  3    1.000000   io_mem  x_raw
-        001  0           uint8 1    3    48   640  1.000000   shared  x_preprocess_tranpose
-        002  245760      bf16  1    8    24   320  1.000000   shared  conv2d_53.tmp_0_Conv
-        003  122880      bf16  1    8    24   320  1.000000   shared  hardswish_0.tmp_0_HardSwish_scale
-        004  0           bf16  1    8    24   320  1.000000   shared  hardswish_0.tmp_0_HardSwish_clip
-        005  122880      bf16  1    8    24   320  1.000000   shared  relu_0.tmp_0_Relu
-        006  0           bf16  1    8    24   320  1.000000   shared  relu_1.tmp_0_Relu
-        007  122880      bf16  1    8    1    1    1.000000   shared  p2o.GlobalAveragePool.1_GlobalAveragePool
-        008  122896      bf16  1    8    1    1    1.000000   shared  hardsigmoid_0.tmp_0_HardSigmoid_scale
-        009  122880      bf16  1    8    1    1    1.000000   shared  hardsigmoid_0.tmp_0_HardSigmoid
-        010  614400      bf16  1    8    24   320  1.000000   shared  p2o.Mul.1_Mul
-        011  0           bf16  1    40   24   320  1.000000   shared  relu_3.tmp_0_Relu
-        012  614400      bf16  1    40   12   320  1.000000   shared  relu_4.tmp_0_Relu
-        013  921600      bf16  1    16   12   320  1.000000   shared  conv2d_59.tmp_0_Conv
-        014  368640      bf16  1    48   12   320  1.000000   shared  relu_5.tmp_0_Relu
-        015  0           bf16  1    48   12   320  1.000000   shared  relu_6.tmp_0_Relu
-        016  368640      bf16  1    16   12   320  1.000000   shared  conv2d_61.tmp_0_Conv
-        017  0           bf16  1    16   12   320  1.000000   shared  p2o.Add.5_Add
-        018  737280      bf16  1    48   12   320  1.000000   shared  conv2d_62.tmp_0_Conv
-        019  0           bf16  1    48   12   320  1.000000   shared  hardswish_1.tmp_0_HardSwish_scale
-        020  368640      bf16  1    48   12   320  1.000000   shared  hardswish_1.tmp_0_HardSwish_clip
-        021  0           bf16  1    48   12   320  1.000000   shared  hardswish_1.tmp_0_HardSwish
-        022  368640      bf16  1    48   6    320  1.000000   shared  depthwise_conv2d_3.tmp_0_Conv
-        023  184320      bf16  1    48   6    320  1.000000   shared  hardswish_2.tmp_0_HardSwish_scale
-        024  0           bf16  1    48   6    320  1.000000   shared  hardswish_2.tmp_0_HardSwish_clip
-        025  184320      bf16  1    48   6    320  1.000000   shared  hardswish_2.tmp_0_HardSwish
-        026  96          bf16  1    48   1    1    1.000000   shared  p2o.GlobalAveragePool.3_GlobalAveragePool
-        027  0           bf16  1    48   1    1    1.000000   shared  hardsigmoid_1.tmp_0_HardSigmoid_scale
-        028  368640      bf16  1    48   1    1    1.000000   shared  hardsigmoid_1.tmp_0_HardSigmoid
-        029  0           bf16  1    48   6    320  1.000000   shared  p2o.Mul.3_Mul
-        030  1474560     bf16  1    24   6    320  1.000000   shared  conv2d_65.tmp_0_Conv
-        031  921600      bf16  1    120  6    320  1.000000   shared  conv2d_66.tmp_0_Conv
-        032  0           bf16  1    120  6    320  1.000000   shared  hardswish_3.tmp_0_HardSwish_scale
-        033  460800      bf16  1    120  6    320  1.000000   shared  hardswish_3.tmp_0_HardSwish_clip
-        034  0           bf16  1    120  6    320  1.000000   shared  hardswish_3.tmp_0_HardSwish
-        035  921600      bf16  1    120  6    320  1.000000   shared  depthwise_conv2d_4.tmp_0_Conv
-        036  460800      bf16  1    120  6    320  1.000000   shared  hardswish_4.tmp_0_HardSwish_scale
-        037  0           bf16  1    120  6    320  1.000000   shared  hardswish_4.tmp_0_HardSwish_clip
-        038  460800      bf16  1    120  6    320  1.000000   shared  hardswish_4.tmp_0_HardSwish
-        039  240         bf16  1    120  1    1    1.000000   shared  p2o.GlobalAveragePool.5_GlobalAveragePool
-        040  0           bf16  1    120  1    1    1.000000   shared  hardsigmoid_2.tmp_0_HardSigmoid_scale
-        041  921600      bf16  1    120  1    1    1.000000   shared  hardsigmoid_2.tmp_0_HardSigmoid
-        042  0           bf16  1    120  6    320  1.000000   shared  p2o.Mul.5_Mul
-        043  460800      bf16  1    24   6    320  1.000000   shared  conv2d_69.tmp_0_Conv
-        044  1382400     bf16  1    24   6    320  1.000000   shared  p2o.Add.15_Add
-        045  921600      bf16  1    120  6    320  1.000000   shared  conv2d_70.tmp_0_Conv
-        046  0           bf16  1    120  6    320  1.000000   shared  hardswish_5.tmp_0_HardSwish_scale
-        047  460800      bf16  1    120  6    320  1.000000   shared  hardswish_5.tmp_0_HardSwish_clip
-        048  0           bf16  1    120  6    320  1.000000   shared  hardswish_5.tmp_0_HardSwish
-        049  921600      bf16  1    120  6    320  1.000000   shared  depthwise_conv2d_5.tmp_0_Conv
-        050  460800      bf16  1    120  6    320  1.000000   shared  hardswish_6.tmp_0_HardSwish_scale
-        051  0           bf16  1    120  6    320  1.000000   shared  hardswish_6.tmp_0_HardSwish_clip
-        052  460800      bf16  1    120  6    320  1.000000   shared  hardswish_6.tmp_0_HardSwish
-        053  921600      bf16  1    120  1    1    1.000000   shared  p2o.GlobalAveragePool.7_GlobalAveragePool
-        054  921840      bf16  1    120  1    1    1.000000   shared  hardsigmoid_3.tmp_0_HardSigmoid_scale
-        055  921600      bf16  1    120  1    1    1.000000   shared  hardsigmoid_3.tmp_0_HardSigmoid
-        056  0           bf16  1    120  6    320  1.000000   shared  p2o.Mul.7_Mul
-        057  460800      bf16  1    24   6    320  1.000000   shared  conv2d_73.tmp_0_Conv
-        058  737280      bf16  1    24   6    320  1.000000   shared  p2o.Add.21_Add
-        059  491520      bf16  1    64   6    320  1.000000   shared  conv2d_74.tmp_0_Conv
-        060  0           bf16  1    64   6    320  1.000000   shared  hardswish_7.tmp_0_HardSwish_scale
-        061  245760      bf16  1    64   6    320  1.000000   shared  hardswish_7.tmp_0_HardSwish_clip
-        062  0           bf16  1    64   6    320  1.000000   shared  hardswish_7.tmp_0_HardSwish
-        063  491520      bf16  1    64   6    320  1.000000   shared  depthwise_conv2d_6.tmp_0_Conv
-        064  245760      bf16  1    64   6    320  1.000000   shared  hardswish_8.tmp_0_HardSwish_scale
-        065  0           bf16  1    64   6    320  1.000000   shared  hardswish_8.tmp_0_HardSwish_clip
-        066  245760      bf16  1    64   6    320  1.000000   shared  hardswish_8.tmp_0_HardSwish
-        067  491520      bf16  1    64   1    1    1.000000   shared  p2o.GlobalAveragePool.9_GlobalAveragePool
-        068  491648      bf16  1    64   1    1    1.000000   shared  hardsigmoid_4.tmp_0_HardSigmoid_scale
-        069  491520      bf16  1    64   1    1    1.000000   shared  hardsigmoid_4.tmp_0_HardSigmoid
-        070  0           bf16  1    64   6    320  1.000000   shared  p2o.Mul.9_Mul
-        071  245760      bf16  1    24   6    320  1.000000   shared  conv2d_77.tmp_0_Conv
-        072  829440      bf16  1    24   6    320  1.000000   shared  p2o.Add.27_Add
-        073  552960      bf16  1    72   6    320  1.000000   shared  conv2d_78.tmp_0_Conv
-        074  0           bf16  1    72   6    320  1.000000   shared  hardswish_9.tmp_0_HardSwish_scale
-        075  276480      bf16  1    72   6    320  1.000000   shared  hardswish_9.tmp_0_HardSwish_clip
-        076  0           bf16  1    72   6    320  1.000000   shared  hardswish_9.tmp_0_HardSwish
-        077  552960      bf16  1    72   6    320  1.000000   shared  depthwise_conv2d_7.tmp_0_Conv
-        078  276480      bf16  1    72   6    320  1.000000   shared  hardswish_10.tmp_0_HardSwish_scale
-        079  0           bf16  1    72   6    320  1.000000   shared  hardswish_10.tmp_0_HardSwish_clip
-        080  276480      bf16  1    72   6    320  1.000000   shared  hardswish_10.tmp_0_HardSwish
-        081  552960      bf16  1    72   1    1    1.000000   shared  p2o.GlobalAveragePool.11_GlobalAveragePool
-        082  553104      bf16  1    72   1    1    1.000000   shared  hardsigmoid_5.tmp_0_HardSigmoid_scale
-        083  552960      bf16  1    72   1    1    1.000000   shared  hardsigmoid_5.tmp_0_HardSigmoid
-        084  0           bf16  1    72   6    320  1.000000   shared  p2o.Mul.11_Mul
-        085  276480      bf16  1    24   6    320  1.000000   shared  conv2d_81.tmp_0_Conv
-        086  0           bf16  1    24   6    320  1.000000   shared  p2o.Add.33_Add
-        087  1105920     bf16  1    144  6    320  1.000000   shared  conv2d_82.tmp_0_Conv
-        088  0           bf16  1    144  6    320  1.000000   shared  hardswish_11.tmp_0_HardSwish_scale
-        089  552960      bf16  1    144  6    320  1.000000   shared  hardswish_11.tmp_0_HardSwish_clip
-        090  0           bf16  1    144  6    320  1.000000   shared  hardswish_11.tmp_0_HardSwish
-        091  552960      bf16  1    144  3    320  1.000000   shared  depthwise_conv2d_8.tmp_0_Conv
-        092  276480      bf16  1    144  3    320  1.000000   shared  hardswish_12.tmp_0_HardSwish_scale
-        093  0           bf16  1    144  3    320  1.000000   shared  hardswish_12.tmp_0_HardSwish_clip
-        094  276480      bf16  1    144  3    320  1.000000   shared  hardswish_12.tmp_0_HardSwish
-        095  288         bf16  1    144  1    1    1.000000   shared  p2o.GlobalAveragePool.13_GlobalAveragePool
-        096  0           bf16  1    144  1    1    1.000000   shared  hardsigmoid_6.tmp_0_HardSigmoid_scale
-        097  552960      bf16  1    144  1    1    1.000000   shared  hardsigmoid_6.tmp_0_HardSigmoid
-        098  0           bf16  1    144  3    320  1.000000   shared  p2o.Mul.13_Mul
-        099  1751040     bf16  1    48   3    320  1.000000   shared  conv2d_85.tmp_0_Conv
-        100  1105920     bf16  1    288  3    320  1.000000   shared  conv2d_86.tmp_0_Conv
-        101  0           bf16  1    288  3    320  1.000000   shared  hardswish_13.tmp_0_HardSwish_scale
-        102  552960      bf16  1    288  3    320  1.000000   shared  hardswish_13.tmp_0_HardSwish_clip
-        103  0           bf16  1    288  3    320  1.000000   shared  hardswish_13.tmp_0_HardSwish
-        104  1105920     bf16  1    288  3    320  1.000000   shared  depthwise_conv2d_9.tmp_0_Conv
-        105  552960      bf16  1    288  3    320  1.000000   shared  hardswish_14.tmp_0_HardSwish_scale
-        106  0           bf16  1    288  3    320  1.000000   shared  hardswish_14.tmp_0_HardSwish_clip
-        107  552960      bf16  1    288  3    320  1.000000   shared  hardswish_14.tmp_0_HardSwish
-        108  0           bf16  1    288  1    1    1.000000   shared  p2o.GlobalAveragePool.15_GlobalAveragePool
-        109  576         bf16  1    72   1    1    1.000000   shared  relu_13.tmp_0_Relu
-        110  0           bf16  1    288  1    1    1.000000   shared  hardsigmoid_7.tmp_0_HardSigmoid_scale
-        111  1105920     bf16  1    288  1    1    1.000000   shared  hardsigmoid_7.tmp_0_HardSigmoid
-        112  0           bf16  1    288  3    320  1.000000   shared  p2o.Mul.15_Mul
-        113  552960      bf16  1    48   3    320  1.000000   shared  conv2d_89.tmp_0_Conv
-        114  1658880     bf16  1    48   3    320  1.000000   shared  p2o.Add.43_Add
-        115  1105920     bf16  1    288  3    320  1.000000   shared  conv2d_90.tmp_0_Conv
-        116  0           bf16  1    288  3    320  1.000000   shared  hardswish_15.tmp_0_HardSwish_scale
-        117  552960      bf16  1    288  3    320  1.000000   shared  hardswish_15.tmp_0_HardSwish_clip
-        118  0           bf16  1    288  3    320  1.000000   shared  hardswish_15.tmp_0_HardSwish
-        119  1105920     bf16  1    288  3    320  1.000000   shared  depthwise_conv2d_10.tmp_0_Conv
-        120  552960      bf16  1    288  3    320  1.000000   shared  hardswish_16.tmp_0_HardSwish_scale
-        121  0           bf16  1    288  3    320  1.000000   shared  hardswish_16.tmp_0_HardSwish_clip
-        122  552960      bf16  1    288  3    320  1.000000   shared  hardswish_16.tmp_0_HardSwish
-        123  0           bf16  1    288  1    1    1.000000   shared  p2o.GlobalAveragePool.17_GlobalAveragePool
-        124  1105920     bf16  1    72   1    1    1.000000   shared  relu_14.tmp_0_Relu
-        125  1106496     bf16  1    288  1    1    1.000000   shared  hardsigmoid_8.tmp_0_HardSigmoid_scale
-        126  1105920     bf16  1    288  1    1    1.000000   shared  hardsigmoid_8.tmp_0_HardSigmoid
-        127  0           bf16  1    288  3    320  1.000000   shared  p2o.Mul.17_Mul
-        128  552960      bf16  1    48   3    320  1.000000   shared  conv2d_93.tmp_0_Conv
-        129  0           bf16  1    48   3    320  1.000000   shared  p2o.Add.49_Add
-        130  1105920     bf16  1    288  3    320  1.000000   shared  conv2d_94.tmp_0_Conv
-        131  0           bf16  1    288  3    320  1.000000   shared  hardswish_17.tmp_0_HardSwish_scale
-        132  552960      bf16  1    288  3    320  1.000000   shared  hardswish_17.tmp_0_HardSwish_clip
-        133  0           bf16  1    288  3    320  1.000000   shared  hardswish_17.tmp_0_HardSwish
-        134  552960      bf16  1    288  1    160  1.000000   shared  p2o.MaxPool.1_MaxPool
-        135  552960      bf16  1    288  160  1    1.000000   shared  squeeze_0.tmp_0_Squeeze
-        136  122880      bf16  160  1    288  1    1.000000   shared  transpose_1.tmp_0_Transpose
-        137  0           bf16  160  1    384  1    1.000000   shared  p2o.LSTM.1_LSTM_fc
-        138  122880      bf16  160  2    1    48   1.000000   shared  p2o.LSTM.1_LSTM
-        139  122880      bf16  160  1    96   1    1.000000   shared  p2o.helper.reshape.0_Reshape
-        140  0           bf16  160  1    384  1    1.000000   shared  p2o.LSTM.5_LSTM_fc
-        141  2120000     bf16  160  2    1    48   1.000000   shared  p2o.LSTM.5_LSTM
-        142  2120000     bf16  1    160  96   1    1.000000   shared  transpose_2.tmp_0_Transpose
-        143  0           bf16  1    160  6625 1    1.000000   shared  p2o.Add.51_Add
-        144  0           fp32  1    160  6625 1    1.000000   io_mem  p2o.Add.51_Add_f32
+        000  0           uint8 1    32   320  3    1.000000   io_mem  x_raw
+        001  0           uint8 1    3    32   320  1.000000   shared  x_preprocess_tranpose
+        002  40960       bf16  1    3    32   320  1.000000   shared  x_rawx_preprocess_bf16
+        003  0           bf16  1    8    16   160  1.000000   shared  conv2d_53.tmp_0_Conv
+        004  40960       bf16  1    8    16   160  1.000000   shared  hardswish_0.tmp_0_HardSwish_scale
+        005  81920       bf16  1    8    16   160  1.000000   shared  hardswish_0.tmp_0_HardSwish_clip
+        006  40960       bf16  1    8    16   160  1.000000   shared  relu_0.tmp_0_Relu
+        007  0           bf16  1    8    16   160  1.000000   shared  relu_1.tmp_0_Relu
+        008  40960       bf16  1    8    1    1    1.000000   shared  hardsigmoid_0.tmp_0_HardSigmoid_scale
+        009  143360      bf16  1    8    1    1    1.000000   shared  hardsigmoid_0.tmp_0_HardSigmoid
+        010  102400      bf16  1    8    16   160  1.000000   shared  p2o.Mul.1_Mul
+        011  0           bf16  1    40   8    160  1.000000   shared  relu_4.tmp_0_Relu
+        012  245760      bf16  1    16   8    160  1.000000   shared  conv2d_59.tmp_0_Conv
+        013  122880      bf16  1    48   8    160  1.000000   shared  relu_5.tmp_0_Relu
+        014  0           bf16  1    48   8    160  1.000000   shared  relu_6.tmp_0_Relu
+        015  286720      bf16  1    48   8    160  1.000000   shared  conv2d_62.tmp_0_Conv
+        016  122880      bf16  1    48   8    160  1.000000   shared  hardswish_1.tmp_0_HardSwish_scale
+        017  0           bf16  1    48   8    160  1.000000   shared  hardswish_1.tmp_0_HardSwish_clip
+        018  122880      bf16  1    48   8    160  1.000000   shared  hardswish_1.tmp_0_HardSwish
+        019  0           bf16  1    48   4    160  1.000000   shared  depthwise_conv2d_3.tmp_0_Conv
+        020  61440       bf16  1    48   4    160  1.000000   shared  hardswish_2.tmp_0_HardSwish_scale
+        021  153600      bf16  1    48   4    160  1.000000   shared  hardswish_2.tmp_0_HardSwish_clip
+        022  92160       bf16  1    48   4    160  1.000000   shared  hardswish_2.tmp_0_HardSwish
+        023  0           bf16  1    48   1    1    1.000000   shared  hardsigmoid_1.tmp_0_HardSigmoid_scale
+        024  96          bf16  1    48   1    1    1.000000   shared  hardsigmoid_1.tmp_0_HardSigmoid
+        025  30720       bf16  1    48   4    160  1.000000   shared  p2o.Mul.3_Mul
+        026  0           bf16  1    24   4    160  1.000000   shared  conv2d_65.tmp_0_Conv
+        027  30720       bf16  1    120  4    160  1.000000   shared  conv2d_66.tmp_0_Conv
+        028  184320      bf16  1    120  4    160  1.000000   shared  hardswish_3.tmp_0_HardSwish_scale
+        029  337920      bf16  1    120  4    160  1.000000   shared  hardswish_3.tmp_0_HardSwish_clip
+        030  184320      bf16  1    120  4    160  1.000000   shared  hardswish_3.tmp_0_HardSwish
+        031  30720       bf16  1    120  4    160  1.000000   shared  depthwise_conv2d_4.tmp_0_Conv
+        032  184320      bf16  1    120  4    160  1.000000   shared  hardswish_4.tmp_0_HardSwish_scale
+        033  368640      bf16  1    120  4    160  1.000000   shared  hardswish_4.tmp_0_HardSwish_clip
+        034  215040      bf16  1    120  4    160  1.000000   shared  hardswish_4.tmp_0_HardSwish
+        035  30720       bf16  1    120  1    1    1.000000   shared  p2o.GlobalAveragePool.5_GlobalAveragePool
+        036  30960       bf16  1    120  1    1    1.000000   shared  hardsigmoid_2.tmp_0_HardSigmoid_scale
+        037  31200       bf16  1    120  1    1    1.000000   shared  hardsigmoid_2.tmp_0_HardSigmoid
+        038  61440       bf16  1    120  4    160  1.000000   shared  p2o.Mul.5_Mul
+        039  30720       bf16  1    24   4    160  1.000000   shared  conv2d_69.tmp_0_Conv
+        040  235520      bf16  1    24   4    160  1.000000   shared  p2o.Add.15_Add
+        041  0           bf16  1    120  4    160  1.000000   shared  conv2d_70.tmp_0_Conv
+        042  266240      bf16  1    120  4    160  1.000000   shared  hardswish_5.tmp_0_HardSwish_scale
+        043  419840      bf16  1    120  4    160  1.000000   shared  hardswish_5.tmp_0_HardSwish_clip
+        044  266240      bf16  1    120  4    160  1.000000   shared  hardswish_5.tmp_0_HardSwish
+        045  0           bf16  1    120  4    160  1.000000   shared  depthwise_conv2d_5.tmp_0_Conv
+        046  266240      bf16  1    120  4    160  1.000000   shared  hardswish_6.tmp_0_HardSwish_scale
+        047  419840      bf16  1    120  4    160  1.000000   shared  hardswish_6.tmp_0_HardSwish_clip
+        048  266240      bf16  1    120  4    160  1.000000   shared  hardswish_6.tmp_0_HardSwish
+        049  0           bf16  1    120  1    1    1.000000   shared  p2o.GlobalAveragePool.7_GlobalAveragePool
+        050  240         bf16  1    120  1    1    1.000000   shared  hardsigmoid_3.tmp_0_HardSigmoid_scale
+        051  480         bf16  1    120  1    1    1.000000   shared  hardsigmoid_3.tmp_0_HardSigmoid
+        052  30720       bf16  1    120  4    160  1.000000   shared  p2o.Mul.7_Mul
+        053  0           bf16  1    24   4    160  1.000000   shared  conv2d_73.tmp_0_Conv
+        054  81920       bf16  1    24   4    160  1.000000   shared  p2o.Add.21_Add
+        055  112640      bf16  1    64   4    160  1.000000   shared  conv2d_74.tmp_0_Conv
+        056  0           bf16  1    64   4    160  1.000000   shared  hardswish_7.tmp_0_HardSwish_scale
+        057  194560      bf16  1    64   4    160  1.000000   shared  hardswish_7.tmp_0_HardSwish_clip
+        058  0           bf16  1    64   4    160  1.000000   shared  hardswish_7.tmp_0_HardSwish
+        059  112640      bf16  1    64   4    160  1.000000   shared  depthwise_conv2d_6.tmp_0_Conv
+        060  0           bf16  1    64   4    160  1.000000   shared  hardswish_8.tmp_0_HardSwish_scale
+        061  194560      bf16  1    64   4    160  1.000000   shared  hardswish_8.tmp_0_HardSwish_clip
+        062  0           bf16  1    64   4    160  1.000000   shared  hardswish_8.tmp_0_HardSwish
+        063  112640      bf16  1    64   1    1    1.000000   shared  p2o.GlobalAveragePool.9_GlobalAveragePool
+        064  112768      bf16  1    64   1    1    1.000000   shared  hardsigmoid_4.tmp_0_HardSigmoid_scale
+        065  112640      bf16  1    64   1    1    1.000000   shared  hardsigmoid_4.tmp_0_HardSigmoid
+        066  112768      bf16  1    64   4    160  1.000000   shared  p2o.Mul.9_Mul
+        067  0           bf16  1    24   4    160  1.000000   shared  p2o.Add.27_Add
+        068  122880      bf16  1    72   4    160  1.000000   shared  conv2d_78.tmp_0_Conv
+        069  30720       bf16  1    72   4    160  1.000000   shared  hardswish_9.tmp_0_HardSwish_scale
+        070  215040      bf16  1    72   4    160  1.000000   shared  hardswish_9.tmp_0_HardSwish_clip
+        071  30720       bf16  1    72   4    160  1.000000   shared  hardswish_9.tmp_0_HardSwish
+        072  122880      bf16  1    72   4    160  1.000000   shared  depthwise_conv2d_7.tmp_0_Conv
+        073  30720       bf16  1    72   4    160  1.000000   shared  hardswish_10.tmp_0_HardSwish_scale
+        074  215040      bf16  1    72   4    160  1.000000   shared  hardswish_10.tmp_0_HardSwish_clip
+        075  30720       bf16  1    72   4    160  1.000000   shared  hardswish_10.tmp_0_HardSwish
+        076  122880      bf16  1    72   1    1    1.000000   shared  p2o.GlobalAveragePool.11_GlobalAveragePool
+        077  123024      bf16  1    72   1    1    1.000000   shared  hardsigmoid_5.tmp_0_HardSigmoid_scale
+        078  122880      bf16  1    72   1    1    1.000000   shared  hardsigmoid_5.tmp_0_HardSigmoid
+        079  276624      bf16  1    72   4    160  1.000000   shared  p2o.Mul.11_Mul
+        080  184320      bf16  1    24   4    160  1.000000   shared  p2o.Add.33_Add
+        081  0           bf16  1    144  4    160  1.000000   shared  conv2d_82.tmp_0_Conv
+        082  184320      bf16  1    144  4    160  1.000000   shared  hardswish_11.tmp_0_HardSwish_scale
+        083  368640      bf16  1    144  4    160  1.000000   shared  hardswish_11.tmp_0_HardSwish_clip
+        084  184320      bf16  1    144  4    160  1.000000   shared  hardswish_11.tmp_0_HardSwish
+        085  0           bf16  1    144  2    160  1.000000   shared  depthwise_conv2d_8.tmp_0_Conv
+        086  92160       bf16  1    144  2    160  1.000000   shared  hardswish_12.tmp_0_HardSwish_scale
+        087  215040      bf16  1    144  2    160  1.000000   shared  hardswish_12.tmp_0_HardSwish_clip
+        088  122880      bf16  1    144  2    160  1.000000   shared  hardswish_12.tmp_0_HardSwish
+        089  0           bf16  1    144  1    1    1.000000   shared  p2o.GlobalAveragePool.13_GlobalAveragePool
+        090  288         bf16  1    144  1    1    1.000000   shared  hardsigmoid_6.tmp_0_HardSigmoid_scale
+        091  576         bf16  1    144  1    1    1.000000   shared  hardsigmoid_6.tmp_0_HardSigmoid
+        092  30720       bf16  1    144  2    160  1.000000   shared  p2o.Mul.13_Mul
+        093  0           bf16  1    48   2    160  1.000000   shared  conv2d_85.tmp_0_Conv
+        094  30720       bf16  1    288  2    160  1.000000   shared  conv2d_86.tmp_0_Conv
+        095  215040      bf16  1    288  2    160  1.000000   shared  hardswish_13.tmp_0_HardSwish_scale
+        096  399360      bf16  1    288  2    160  1.000000   shared  hardswish_13.tmp_0_HardSwish_clip
+        097  215040      bf16  1    288  2    160  1.000000   shared  hardswish_13.tmp_0_HardSwish
+        098  30720       bf16  1    288  2    160  1.000000   shared  depthwise_conv2d_9.tmp_0_Conv
+        099  215040      bf16  1    288  2    160  1.000000   shared  hardswish_14.tmp_0_HardSwish_scale
+        100  430080      bf16  1    288  2    160  1.000000   shared  hardswish_14.tmp_0_HardSwish_clip
+        101  245760      bf16  1    288  2    160  1.000000   shared  hardswish_14.tmp_0_HardSwish
+        102  30720       bf16  1    288  1    1    1.000000   shared  p2o.GlobalAveragePool.15_GlobalAveragePool
+        103  31296       bf16  1    72   1    1    1.000000   shared  relu_13.tmp_0_Relu
+        104  31440       bf16  1    288  1    1    1.000000   shared  hardsigmoid_7.tmp_0_HardSigmoid_scale
+        105  32016       bf16  1    288  1    1    1.000000   shared  hardsigmoid_7.tmp_0_HardSigmoid
+        106  61440       bf16  1    288  2    160  1.000000   shared  p2o.Mul.15_Mul
+        107  30720       bf16  1    48   2    160  1.000000   shared  conv2d_89.tmp_0_Conv
+        108  368640      bf16  1    48   2    160  1.000000   shared  p2o.Add.43_Add
+        109  0           bf16  1    288  2    160  1.000000   shared  conv2d_90.tmp_0_Conv
+        110  399360      bf16  1    288  2    160  1.000000   shared  hardswish_15.tmp_0_HardSwish_scale
+        111  583680      bf16  1    288  2    160  1.000000   shared  hardswish_15.tmp_0_HardSwish_clip
+        112  399360      bf16  1    288  2    160  1.000000   shared  hardswish_15.tmp_0_HardSwish
+        113  0           bf16  1    288  2    160  1.000000   shared  depthwise_conv2d_10.tmp_0_Conv
+        114  399360      bf16  1    288  2    160  1.000000   shared  hardswish_16.tmp_0_HardSwish_scale
+        115  583680      bf16  1    288  2    160  1.000000   shared  hardswish_16.tmp_0_HardSwish_clip
+        116  399360      bf16  1    288  2    160  1.000000   shared  hardswish_16.tmp_0_HardSwish
+        117  0           bf16  1    288  1    1    1.000000   shared  p2o.GlobalAveragePool.17_GlobalAveragePool
+        118  576         bf16  1    72   1    1    1.000000   shared  relu_14.tmp_0_Relu
+        119  720         bf16  1    288  1    1    1.000000   shared  hardsigmoid_8.tmp_0_HardSigmoid_scale
+        120  1296        bf16  1    288  1    1    1.000000   shared  hardsigmoid_8.tmp_0_HardSigmoid
+        121  30720       bf16  1    288  2    160  1.000000   shared  p2o.Mul.17_Mul
+        122  0           bf16  1    48   2    160  1.000000   shared  conv2d_93.tmp_0_Conv
+        123  184320      bf16  1    48   2    160  1.000000   shared  p2o.Add.49_Add
+        124  0           bf16  1    288  2    160  1.000000   shared  conv2d_94.tmp_0_Conv
+        125  184320      bf16  1    288  2    160  1.000000   shared  hardswish_17.tmp_0_HardSwish_scale
+        126  368640      bf16  1    288  2    160  1.000000   shared  hardswish_17.tmp_0_HardSwish_clip
+        127  184320      bf16  1    288  2    160  1.000000   shared  hardswish_17.tmp_0_HardSwish
+        128  0           bf16  1    288  1    80   1.000000   shared  p2o.MaxPool.1_MaxPool
+        129  0           bf16  1    288  80   1    1.000000   shared  squeeze_0.tmp_0_Squeeze
+        130  61440       bf16  80   1    288  1    1.000000   shared  transpose_1.tmp_0_Transpose
+        131  0           bf16  80   1    384  1    1.000000   shared  p2o.LSTM.1_LSTM_fc
+        132  61440       bf16  80   2    1    48   1.000000   shared  p2o.LSTM.1_LSTM
+        133  61440       bf16  80   1    96   1    1.000000   shared  p2o.helper.reshape.0_Reshape
+        134  0           bf16  80   1    384  1    1.000000   shared  p2o.LSTM.5_LSTM_fc
+        135  1060000     bf16  80   2    1    48   1.000000   shared  p2o.LSTM.5_LSTM
+        136  1060000     bf16  1    80   96   1    1.000000   shared  transpose_2.tmp_0_Transpose
+        137  0           bf16  1    80   6625 1    1.000000   shared  p2o.Add.51_Add
+        138  0           fp32  1    80   6625 1    1.000000   io_mem  p2o.Add.51_Add_f32

@@ -13,7 +13,7 @@ output.shape: (160, 1, 5531, 1) // lxdx
 
 | model | runnable? | quality |
 | :-: | :-: | :-: |
-| chocr_rec_bf16 | √ | better than ppocr_det_v2 |
+| chocr_rec_bf16 | √ | worse than ppocr_det_v2 |
 
 ⚪ build & run
 
