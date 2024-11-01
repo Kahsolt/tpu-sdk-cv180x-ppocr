@@ -38,6 +38,8 @@ scp root@192.168.42.1:/root/tpu-sdk-cv180x-ocr/samples/results.txt .
 python convert_results.py ./results.txt
 ```
 
+⚠ 下面的实验记录使用超参数 `DET_SEG_THRESH=0.3` 和 `DET_MIN_SIZE=3`
+
 ⚪ ppocrv3_det + ppocr_mb_rec
 
 ```shell

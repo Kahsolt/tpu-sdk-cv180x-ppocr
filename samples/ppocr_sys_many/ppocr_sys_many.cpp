@@ -19,9 +19,11 @@ using std::vector;
 #define us_to_ms(x) (float(x) / 1000)
 
 #define DET_IMG_SIZE      640
-#define DET_SEG_THRESH    0.3
+#define DET_SEG_THRESH    0.5
+#define DET_DILATE_NUM    0
+#define DET_DILATE_K      3
 #define DET_MAX_BOXES     100
-#define DET_MIN_SIZE      3
+#define DET_MIN_SIZE      5
 #define DET_UNCLIP_K      2.7
 #define DET_UNCLIP_T      1.414
 #define DET_QSCALE        127
@@ -124,6 +126,10 @@ int main(int argc, char *argv[]) {
   vector<Point2f> pts(4);         // getPerspectiveTransform
   vector<Point2f> pts_std(4);
   Mat M;                          // warpPerspective
+#if DET_DILATE_NUM > 0
+  Mat dilate_kernel = getStructuringElement(MORPH_RECT, {DET_DILATE_K, DET_DILATE_K});
+  Point dilate_center = Point(-1, -1);
+#endif
   // fs & write
   FILE* fout = fopen(SAVE_FILE_PATH, "w");
   struct dirent *entry;
@@ -178,6 +184,9 @@ int main(int argc, char *argv[]) {
     // postprocess (bitmap -> boxes)
     gettimeofday(&tv_start, NULL);
     bitmap = Mat(DET_IMG_SIZE, DET_IMG_SIZE, CV_8SC1, plogits) >= int8_t(DET_SEG_THRESH * DET_QSCALE);
+#if DET_DILATE_NUM > 0
+    dilate(bitmap, bitmap, dilate_kernel, dilate_center, DET_DILATE_NUM);
+#endif
 
 #ifdef DEBUG_DUMP_DET
     sprintf(dump_fp, "%s/%s\0", SAVE_DIR_PATH, entry->d_name);
