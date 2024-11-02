@@ -300,10 +300,9 @@ int main(int argc, char *argv[]) {
             idx = i;
           }
         }
-        if (idx != 0 && idx != last_idx) {
-          fprintf(fout, " %d", idx);
-          last_idx = idx;
-        }
+        if (idx == last_idx) continue;
+        if (idx != 0) fprintf(fout, " %d", idx);
+        last_idx = idx;
       }
       fputc('\n', fout);
       gettimeofday(&tv_end, NULL);
@@ -332,7 +331,7 @@ int main(int argc, char *argv[]) {
   puts("================================");
   printf("n_img:        %d\n", n_img);
   printf("n_crop:       %d\n", n_crop);
-  puts("--------------------------------");
+  puts("------------[Total]-------------");
   printf("ts_img_load:  %.3f ms\n", us_to_ms(ts_img_load));
   printf("ts_img_crop:  %.3f ms\n", us_to_ms(ts_img_crop));
   printf("ts_det_pre:   %.3f ms\n", us_to_ms(ts_det_pre));
@@ -341,10 +340,16 @@ int main(int argc, char *argv[]) {
   printf("ts_rec_pre:   %.3f ms\n", us_to_ms(ts_rec_pre));
   printf("ts_rec_infer: %.3f ms\n", us_to_ms(ts_rec_infer));
   printf("ts_rec_post:  %.3f ms\n", us_to_ms(ts_rec_post));
-  puts("--------------------------------");
-  printf("ts_avg_pre:   %.3f ms\n", us_to_ms(ts_det_pre   + ts_rec_pre  ) / n_img);
-  printf("ts_avg_infer: %.3f ms\n", us_to_ms(ts_det_infer + ts_rec_infer) / n_img);
-  printf("ts_avg_post:  %.3f ms\n", us_to_ms(ts_det_post  + ts_rec_post ) / n_img);
+  puts("-----------[Average]------------");
+  printf("ts_det_pre:   %.3f ms\n", us_to_ms(ts_det_pre                 ) / n_img);
+  printf("ts_rec_pre:   %.3f ms\n", us_to_ms(ts_rec_pre                 ) / n_crop);
+  printf("ts_pre:       %.3f ms\n", us_to_ms(ts_det_pre   + ts_rec_pre  ) / n_img);
+  printf("ts_det_infer: %.3f ms\n", us_to_ms(ts_det_infer               ) / n_img);
+  printf("ts_rec_infer: %.3f ms\n", us_to_ms(ts_rec_infer               ) / n_crop);
+  printf("ts_infer:     %.3f ms\n", us_to_ms(ts_det_infer + ts_rec_infer) / n_img);
+  printf("ts_det_post:  %.3f ms\n", us_to_ms(ts_det_post                ) / n_img);
+  printf("ts_rec_post:  %.3f ms\n", us_to_ms(ts_rec_post                ) / n_crop);
+  printf("ts_post:      %.3f ms\n", us_to_ms(ts_det_post  + ts_rec_post ) / n_img);
   puts("================================");
   printf("Total time:   %.3f ms\n", timeval_to_ms(tv_init, tv_end));
   #pragma endregion perfcnt
