@@ -19,7 +19,7 @@ using std::vector;
 #define us_to_ms(x) (float(x) / 1000)
 
 #define DET_IMG_SIZE      640
-#define DET_SEG_THRESH    0.5
+#define DET_SEG_THRESH    0.6
 #define DET_DILATE_NUM    0
 #define DET_DILATE_K      3
 #define DET_MAX_BOXES     100
