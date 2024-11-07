@@ -43,9 +43,9 @@ cd samples
 
 - https://github.com/milkv-duo/tpu-sdk-cv180x
 - https://github.com/sophgo/cviruntime
-- cv::imread is slow 
-  - https://github.com/libvips/pyvips/issues/179#issuecomment-618936358
-  - https://github.com/libvips/libvips
+- https://github.com/nihui/opencv-mobile
+  - hardware-accelerated JPEG-decoding is available on MilkV-Duo! 🎉
+  - Please use release `opencv-mobile-4.10.0-milkv-duo.zip`
 
 ----
 by Armit

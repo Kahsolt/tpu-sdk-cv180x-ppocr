@@ -5,6 +5,10 @@ build/
 # compile toolchain
 duo-sdk/
 
+# opencv lib
+opencv-mobile-4.10.0-milkv-duo/
+opencv-mobile-4.10.0-milkv-duo.zip
+
 # infer results
 results*
 

@@ -15,27 +15,22 @@ endif()
 include_directories(${TPU_SDK_PATH}/include)
 link_directories(${TPU_SDK_PATH}/lib)
 
-if(NOT DEFINED OPENCV_PATH)
-  message(FATAL_ERROR "Please set OPENCV_PATH to point to the opencvn installation")
-endif()
-include_directories(${OPENCV_PATH}/include)
-link_directories(${OPENCV_PATH}/lib)
-
 set(CVI_LIBS ${CVI_LIBS} cviruntime cvikernel)
 if(NOT CMAKE_CROSSCOMPILING)
   set(CVI_LIBS ${CVI_LIBS} cvicmodel)
 endif()
 
-set(OPENCV_LIBS ${OPENCV_LIBS} opencv_core opencv_imgcodecs opencv_imgproc)
-if(NOT CMAKE_CROSSCOMPILING)
-  set(OPENCV_LIBS ${OPENCV_LIBS} opencv_highgui)
-endif()
+find_package(OpenCV REQUIRED core highgui imgproc)
+message("OpenCV_INSTALL_PATH: ${OpenCV_INSTALL_PATH}")
+message("OpenCV_INCLUDE_DIRS: ${OpenCV_INCLUDE_DIRS}")
+message("OpenCV_LIBS: ${OpenCV_LIBS}")
+include_directories(${OpenCV_INCLUDE_DIRS})
 
 set(EXTRA_LIBS ${EXTRA_LIBS} dl stdc++ pthread z)
 
 add_executable(cvi_sample_ppocr_sys_many ppocr_sys_many.cpp)
 target_link_libraries(cvi_sample_ppocr_sys_many
   ${CVI_LIBS}
-  ${OPENCV_LIBS}
+  ${OpenCV_LIBS}
   ${EXTRA_LIBS})
 install(TARGETS cvi_sample_ppocr_sys_many cvi_sample_ppocr_sys_many DESTINATION bin)
