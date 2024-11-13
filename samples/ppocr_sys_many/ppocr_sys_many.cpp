@@ -18,17 +18,12 @@ using std::vector;
 #define max(x, y) (((x) >= (y)) ? (x) : (y))
 #define us_to_ms(x) (float(x) / 1000)
 
-#define DET_IMG_SIZE      640
 #define DET_SEG_THRESH    0.6
-#define DET_DILATE_NUM    0
-#define DET_DILATE_K      3
 #define DET_MAX_BOXES     100
 #define DET_MIN_SIZE      5
 #define DET_UNCLIP_K      2.7
-#define DET_UNCLIP_T      1.414
+#define DET_UNCLIP_T      1.4142135623731
 #define DET_QSCALE        127
-#define REC_IMG_WIDTH     320
-#define REC_IMG_HEIGHT    32
 #define REC_IMG_CROP_MIN  16
 #define REC_LOGIT_NINF    -114514191981.0
 
@@ -101,15 +96,21 @@ int main(int argc, char *argv[]) {
   CVI_NN_GetInputOutputTensors(det_model, &det_inputs, &det_input_num, &det_outputs, &det_output_num);
   CVI_TENSOR *det_input  = CVI_NN_GetTensorByName(CVI_NN_DEFAULT_TENSOR, det_inputs,  det_input_num);
   CVI_TENSOR *det_output = CVI_NN_GetTensorByName(CVI_NN_DEFAULT_TENSOR, det_outputs, det_output_num);
+  CV_Assert(det_output->fmt == CVI_FMT_INT8);
   uint8_t *det_ptr = (uint8_t *) CVI_NN_TensorPtr(det_input);
+  const int DET_IMG_SIZE = det_input->shape.dim[2];
 
   CVI_TENSOR *rec_inputs, *rec_outputs;
   int32_t rec_input_num, rec_output_num;
   CVI_NN_GetInputOutputTensors(rec_model, &rec_inputs, &rec_input_num, &rec_outputs, &rec_output_num);
   CVI_TENSOR *rec_input  = CVI_NN_GetTensorByName(CVI_NN_DEFAULT_TENSOR, rec_inputs,  rec_input_num);
   CVI_TENSOR *rec_output = CVI_NN_GetTensorByName(CVI_NN_DEFAULT_TENSOR, rec_outputs, rec_output_num);
+  CV_Assert(rec_output->fmt == CVI_FMT_FP32);
   uint8_t *rec_ptr = (uint8_t *) CVI_NN_TensorPtr(rec_input);
-  const size_t L = rec_output->shape.dim[1], D = rec_output->shape.dim[2];
+  const int REC_IMG_HEIGHT = rec_input->shape.dim[1],
+            REC_IMG_WIDTH  = rec_input->shape.dim[2];
+  const int L = rec_output->shape.dim[1], 
+            D = rec_output->shape.dim[2];
 
   gettimeofday(&tv_end, NULL);
   printf("ts_model_load: %.3f ms\n", timeval_to_ms(tv_start, tv_end));
@@ -126,10 +127,6 @@ int main(int argc, char *argv[]) {
   vector<Point2f> pts(4);         // getPerspectiveTransform
   vector<Point2f> pts_std(4);
   Mat M;                          // warpPerspective
-#if DET_DILATE_NUM > 0
-  Mat dilate_kernel = getStructuringElement(MORPH_RECT, {DET_DILATE_K, DET_DILATE_K});
-  Point dilate_center = Point(-1, -1);
-#endif
   // fs & write
   FILE* fout = fopen(SAVE_FILE_PATH, "w");
   struct dirent *entry;
@@ -184,9 +181,6 @@ int main(int argc, char *argv[]) {
     // postprocess (bitmap -> boxes)
     gettimeofday(&tv_start, NULL);
     bitmap = Mat(DET_IMG_SIZE, DET_IMG_SIZE, CV_8SC1, plogits) >= int8_t(DET_SEG_THRESH * DET_QSCALE);
-#if DET_DILATE_NUM > 0
-    dilate(bitmap, bitmap, dilate_kernel, dilate_center, DET_DILATE_NUM);
-#endif
 
 #ifdef DEBUG_DUMP_DET
     sprintf(dump_fp, "%s/%s\0", SAVE_DIR_PATH, entry->d_name);
@@ -204,7 +198,7 @@ int main(int argc, char *argv[]) {
       int w = bbox.size.width, h = bbox.size.height;
       if (min(w, h) < DET_MIN_SIZE) continue;
       bbox.points(tmp); // native order: bottomLeft, topLeft, topRight, bottomRight, but not stable
-      // sorted order: top-left, top-right, bottom-right, bottom-left
+      // sorted order: bottom-left, bottom-right, top-right, top-left
       qsort(tmp, 4, sizeof(Point2f), point_cmp);
       int idx_0, idx_1, idx_2, idx_3;
       if (tmp[1].y > tmp[0].y) { idx_0 = 0; idx_3 = 1; }
@@ -246,7 +240,7 @@ int main(int argc, char *argv[]) {
       pts_std[3] = {0.0,       im_crop_h};
       pts[0] = box[0]; pts[1] = box[1]; pts[2] = box[2]; pts[3] = box[3]; // dtype cvt
       M = getPerspectiveTransform(pts, pts_std);
-      warpPerspective(im, im_crop, M, {im_crop_w, im_crop_h}, INTER_CUBIC, BORDER_REPLICATE);
+      warpPerspective(im, im_crop, M, {int(im_crop_w), int(im_crop_h)}, INTER_CUBIC, BORDER_REPLICATE);
       if (2 * im_crop.rows >= 3 * im_crop.cols)   // H / W >= 1.5
         rotate(im_crop, im_crop, ROTATE_90_COUNTERCLOCKWISE);
       gettimeofday(&tv_end, NULL);

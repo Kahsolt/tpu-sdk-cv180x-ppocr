@@ -4,13 +4,12 @@
 
 性能优化建议:
 
-  - 使用更小的 det 模型
+  - 使用更小参数量/输入尺寸的 det 模型
   - 设置更大的 `DET_MIN_SIZE` (查全率受损!)
   - 不启用 `DEBUG_DUMP_*` 
 
 使用自定义的 cvimodel 模型：
 
-  - 检查 `DET_IMG_SIZE`, `REC_IMG_WIDTH`, `REC_IMG_HEIGHT` 设置是否与模型编译规格一致
   - 检查 `CVI_NN_TensorPtr` 返回值类型是否与模型编译规格一致
   - 检查 `L` 和 `D` 的索引位置是否与模型编译规格一致
 
